@@ -1,0 +1,9 @@
+ADD:
+	- Adding a 9th contact should replace the OLDEST contact, shifting all contacts up by one index.
+	- A string input with only whitespace should not be acceptable
+	- A phone number with spaces could potentially be acceptable
+
+Contact Variables:
+
+	- Should all be private!!! << redesign required
+
