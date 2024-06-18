@@ -5,5 +5,7 @@ int	main()
 {
 	PhoneBook 	phonebook;
 	
+	phonebook.open();
+
 	return (0);
 }

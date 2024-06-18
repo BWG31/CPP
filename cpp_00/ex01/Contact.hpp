@@ -3,6 +3,7 @@
 
 # include <iostream>
 # include <string>
+# include <iomanip>
 
 # define RESET	"\033[0m"
 # define RED	"\033[31m"
@@ -20,12 +21,16 @@ class Contact{
 		std::string	nickname;
 
 		std::string	get_input(const std::string prompt, bool numeric = false);
-		bool		valid_number(const std::string input);
+		bool		only_whitespace(const std::string input);
 		void		invalid_input();
+		bool		valid_number(const std::string input);
+		std::string	truncated_name(std::string name);
 	
 	public:
-		
+		Contact		&operator=(const Contact &rhs);
+	
 		void		get_new_contact();
+		void		preview();
 		void 		print_info();
 		bool		exists();
 };

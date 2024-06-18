@@ -1,6 +1,8 @@
 #include "PhoneBook.hpp"
 
-PhoneBook::PhoneBook()
+PhoneBook::PhoneBook() : contacts(), contact_count(0) {}
+
+void PhoneBook::open()
 {
 	std::string	input;
 
@@ -8,7 +10,11 @@ PhoneBook::PhoneBook()
 	while (true)
 	{
 		std::cout << YELLOW << "Enter Command: " << RESET;
-		std::getline(std::cin, input);
+		if (!std::getline(std::cin, input))
+		{
+			std::cerr << RED << "EOF detected. Aborting program." << RESET << std::endl;
+			exit(EXIT_FAILURE);
+		}
 		if (input == "ADD")
 			add_new_contact();
 		else if (input == "SEARCH")
@@ -30,8 +36,16 @@ void PhoneBook::add_new_contact()
 {
 	static int	index = 0;
 
+	if (contact_count == MAX_CONTACTS)
+	{
+		for (int i = 0; i < MAX_CONTACTS - 1; i++)
+			contacts[i] = contacts[i + 1];
+	}
+	else
+		contact_count++;
 	contacts[index].get_new_contact();
-	std::cout << GREEN << "Successfully added new contact" << RESET << std::endl;
+	std::cout	<< GREEN << "Successfully added new contact at index: "
+				<< index << RESET << std::endl;
 	if (index < MAX_CONTACTS - 1)
 		index++;
 }
@@ -50,6 +64,11 @@ void PhoneBook::search()
 	{
 		std::cout << YELLOW << "Enter index number: " << RESET;
 		std::cin >> input;
+		if (std::cin.eof())
+		{
+			std::cerr << RED << "EOF detected. Aborting program." << RESET << std::endl;
+			exit(EXIT_FAILURE);
+		}
 		if (std::cin.fail() || !valid_index(input))
 		{
 			std::cin.clear();
@@ -74,19 +93,8 @@ void PhoneBook::print_contact_list()
 	{
 		std::cout << std::setw(10) << i;
 		std::cout << "|";
-		std::cout << std::setw(10) << truncated_name(contacts[i].first_name);
-		std::cout << "|";
-		std::cout << std::setw(10) << truncated_name(contacts[i].last_name);
-		std::cout << "|";
-		std::cout << std::setw(10) << truncated_name(contacts[i].nickname) << std::endl;
+		contacts[i].preview();
 	}
-}
-
-std::string PhoneBook::truncated_name(std::string name)
-{
-	if (name.length() > 10)
-		return (name.substr(0, 9) + ".");
-	return (name);
 }
 
 void PhoneBook::invalid_command()

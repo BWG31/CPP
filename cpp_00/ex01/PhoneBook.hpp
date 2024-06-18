@@ -28,16 +28,18 @@
 class PhoneBook{
 	private:
 		Contact	contacts[MAX_CONTACTS];
+		int		contact_count;
+
 		void		info();
 		void		add_new_contact();
 		void		search();
 		void		print_contact_list();
-		std::string	truncated_name(std::string name);
 		void		invalid_command();
 		bool		valid_index(int input);
 		void		close();
 	public:
 		PhoneBook();
+		void		open();
 };
 
 #endif
