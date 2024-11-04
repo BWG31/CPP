@@ -4,3 +4,5 @@
 *.dSYM/
 *.vscode
 *.log
+*.d
+
