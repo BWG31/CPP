@@ -11,7 +11,7 @@ CC			:=	c++
 CFLAGS		:=	-Wall -Wextra -Werror -std=c++98
 DFLAGS		:=	-MMD -MF
 DEP_FILE	=	$(DEP_DIR)$*.d
-RM			:=	rm -r
+RM			:=	rm -rf
 
 SRCS	:=	$(addprefix $(SRC_DIR), $(addsuffix .cpp, $(SRC)))
 OBJS	:=	$(addprefix $(OBJ_DIR), $(addsuffix .o, $(SRC)))
@@ -23,27 +23,29 @@ LDFLAGS		=
 RESET		=	\033[0;39m
 GREEN		=	\033[0;32m
 
+MAKEFLAGS	:=	--no-print-directory
+
 all:			$(NAME)
 
 -include $(DEPS)
 
 $(NAME):	$(OBJS)
-			$(CC) $(CFLAGS) $(LDFLAGS) $< -o $@
-			@printf "Created executable: $(GREEN)$(NAME)$(RESET)"
+			$(CC) $(CFLAGS) $(LDFLAGS) $(OBJS) -o $@
+			@printf "Created executable: $(GREEN)$(NAME)$(RESET)\n"
 
 $(OBJ_DIR)%.o:	$(SRC_DIR)%.cpp | $(DEP_DIR) $(OBJ_DIR)
 				$(CC) $(CFLAGS) $(DFLAGS) $(DEP_FILE) $(INCLUDES) -c $< -o $@
 
 $(DEP_DIR) $(OBJ_DIR):
-				mkdir -p $@
+				@mkdir -p $@
 
 clean:
-				$(RM) -f $(OBJ_DIR) $(DEP_DIR)
+				$(RM) $(OBJ_DIR) $(DEP_DIR)
 
 fclean:			clean
 				$(RM) $(NAME)
 
 re:				fclean
-				$(MAKE) all
+				@$(MAKE) all
 
 .PHONY: all clean fclean re

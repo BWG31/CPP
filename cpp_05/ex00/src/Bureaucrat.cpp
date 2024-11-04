@@ -8,7 +8,7 @@ Bureaucrat::Bureaucrat(std::string name, int grade) : _name(name)
 	this->setGrade(grade);
 }
 
-Bureaucrat::Bureaucrat(const Bureaucrat &other)
+Bureaucrat::Bureaucrat(const Bureaucrat &other) : _name(other.getName())
 {
 	*this = other;
 }
@@ -26,9 +26,10 @@ Bureaucrat &Bureaucrat::operator=(const Bureaucrat &rhs)
 	return (*this);
 }
 
-std::ostream &Bureaucrat::operator<<(std::operator &os, Bureaucrat const &other)
+std::ostream &operator<<(std::ostream &os, const Bureaucrat &other)
 {
-	// TODO
+	os << other.getName() << ", bureaucrat grade " << other.getGrade();
+	return (os);
 }
 
 //  ============| METHODS |=============

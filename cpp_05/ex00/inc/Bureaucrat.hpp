@@ -10,6 +10,11 @@
 # define DEFAULT_NAME	"Unknown"
 # define DEFAULT_GRADE	(LOWEST_GRADE)
 
+# define RESET	"\033[0m"
+# define RED	"\033[31m"
+# define GREEN	"\033[32m"
+# define YELLOW	"\033[33m"
+
 class Bureaucrat
 {
 	public:
@@ -44,6 +49,6 @@ class Bureaucrat
 		};
 };
 
-std::ostream &operator<<(std::ostream &os ,const Bureaucrat &other);
+std::ostream &operator<<(std::ostream &os, const Bureaucrat &other);
 
 #endif
