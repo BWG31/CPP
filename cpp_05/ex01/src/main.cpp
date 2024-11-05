@@ -56,7 +56,7 @@ void	test_sign_form(void)
 		print_F(very_important);
 
 		//	Promote "somedude" | Sign form : YES
-		std::cout << "PROMOTING RALPH (*or was it Randy?*)" << std::endl;
+		std::cout << "PROMOTING RALPH (or was it Randy?)" << std::endl;
 		somedude.setGrade(10);
 		somedude.signForm(very_important);
 		print_F(very_important);

@@ -79,7 +79,7 @@ void Form::validateGrade(int grade) const
 		throw GradeTooLowException();
 }
 
-void Form::beSigned(Bureaucrat B)
+void Form::beSigned(const Bureaucrat &B)
 {
 	if (B.getGrade() > this->getSignGrade())
 		throw GradeTooLowException();
