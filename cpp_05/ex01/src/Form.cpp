@@ -3,11 +3,21 @@
 //  ==========| CONSTRUCTORS |==========
 Form::Form() : 
 	_name(DEFAULT_FORM_NAME),
-	_is_signed(false),
+	_signed(false),
 	_sign_grade(DEFAULT_FORM_SIGN_GRADE),
 	_execute_grade(DEFAULT_FORM_EXEC_GRADE)
 {
 	return ;
+}
+
+Form::Form(std::string name, int sign_grade, int execute_grade) :
+	_name(name),
+	_signed(false),
+	_sign_grade(sign_grade),
+	_execute_grade(execute_grade)
+{
+	validateGrade(sign_grade);
+	validateGrade(execute_grade);
 }
 
 Form::Form(const Form &other) :
@@ -27,7 +37,7 @@ Form::~Form()
 //  =======| OPERATOR OVERLOADS |=======
 Form &Form::operator=(const Form &rhs)
 {
-	this->_is_signed = rhs.getState();
+	this->_signed = rhs.getState();
 	return (*this);
 }
 
@@ -48,7 +58,7 @@ std::string Form::getName() const
 
 bool Form::getState() const
 {
-	return (_is_signed);
+	return (_signed);
 }
 
 int Form::getSignGrade() const
@@ -61,14 +71,30 @@ int Form::getExecGrade() const
 	return (_execute_grade);
 }
 
+void Form::validateGrade(int grade) const
+{
+	if (grade < HIGHEST_FORM_GRADE)
+		throw GradeTooHighException();
+	if (grade > LOWEST_FORM_GRADE)
+		throw GradeTooLowException();
+}
+
+void Form::beSigned(Bureaucrat B)
+{
+	if (B.getGrade() > this->getSignGrade())
+		throw GradeTooLowException();
+	else
+		this->_signed = true;
+}
+
 //  ========| VIRTUAL METHODS |=========
 
 const char *Form::GradeTooHighException::what() const throw()
 {
-	return ("Grade too high (Form)");
+	return ("Grade too high");
 }
 
 const char *Form::GradeTooLowException::what() const throw()
 {
-	return ("Grade too low (Form)");
+	return ("Grade too low");
 }

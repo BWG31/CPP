@@ -46,9 +46,9 @@ int Bureaucrat::getGrade() const
 
 void Bureaucrat::setGrade(int new_grade)
 {
-	if (new_grade < HIGHEST_GRADE)
+	if (new_grade < HIGHEST_BCT_GRADE)
 		throw GradeTooHighException();
-	if (new_grade > LOWEST_GRADE)
+	if (new_grade > LOWEST_BCT_GRADE)
 		throw GradeTooLowException();
 	_grade = new_grade;
 }
@@ -63,14 +63,27 @@ void Bureaucrat::decrementGrade()
 	this->setGrade(this->getGrade() + 1);
 }
 
+void Bureaucrat::signForm(Form &F)
+{
+	try {
+		F.beSigned(*this);
+		std::cout << GREEN << this->getName() << " signed " << F.getName() \
+		<< RESET << std::endl;
+	}
+	catch (std::exception &e) {
+		std::cout << RED << this->getName() << " couldn't sign " << F.getName() << \
+		" because: " << e.what() << RESET << std::endl;
+	}
+}
+
 //  ========| VIRTUAL METHODS |=========
 
 const char  *Bureaucrat::GradeTooHighException::what() const throw()
 {
-	return ("Grade too high (Bureaucrat)");
+	return ("Grade too high");
 }
 
 const char  *Bureaucrat::GradeTooLowException::what() const throw()
 {
-	return ("Grade too low (Bureaucrat)");
+	return ("Grade too low");
 }

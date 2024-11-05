@@ -4,16 +4,20 @@
 # include <string>
 # include <iostream>
 
-# define HIGHEST_GRADE	(1)
-# define LOWEST_GRADE	(150)
+# include "Form.hpp"
+
+# define HIGHEST_BCT_GRADE	(1)
+# define LOWEST_BCT_GRADE	(150)
 
 # define DEFAULT_NAME	"Unknown"
-# define DEFAULT_GRADE	(LOWEST_GRADE)
+# define DEFAULT_GRADE	(LOWEST_BCT_GRADE)
 
 # define RESET	"\033[0m"
 # define RED	"\033[31m"
 # define GREEN	"\033[32m"
 # define YELLOW	"\033[33m"
+
+class Form;
 
 class Bureaucrat
 {
@@ -31,6 +35,7 @@ class Bureaucrat
 		void		setGrade(int new_grade);
 		void		incrementGrade();
 		void		decrementGrade();
+		void		signForm(Form &F);
 
 	private:
 		const std::string	_name;
