@@ -1,10 +1,11 @@
 #include "Bureaucrat.hpp"
 #include "AForm.hpp"
+#include "ShrubberyCreationForm.hpp"
 #include <iomanip>
 
 //	TESTS
 void	test_constructors(void);
-void	test_sign_form(void);
+void	test_execute_form(void);
 
 //	HELPERS
 void	header(std::string name);
@@ -15,7 +16,7 @@ void	print_e(std::exception &e);
 int	main(void)
 {
 	test_constructors();
-	test_sign_form();
+	test_execute_form();
 	return (0);
 }
 
@@ -23,43 +24,23 @@ void	test_constructors(void)
 {
 	header("constructors");
 	try {
-		AForm	form_A;			//	VALID (default values applied)
-		print_F(form_A);
-		AForm	form_B(form_A);	//	VALID (copy constructor)
-		print_F(form_B);
-		AForm 	form_C("Classified AForm", 1, 1);	// VALID
-		print_F(form_C);
-		AForm	form_D("Invalid AForm", 0, 200);	// INVALID (invalid execute grade)
-		print_F(form_D);
+		ShrubberyCreationForm	ShrubA("abc");
+		ShrubberyCreationForm	ShrubC("123");
+		print_F(ShrubA);
+		print_F(ShrubC);
+		ShrubC = ShrubA;
+		print_F(ShrubC);
 	}
 	catch (std::exception &e){
 		print_e(e);
 	}
 }
 
-void	test_sign_form(void)
+void	test_execute_form(void)
 {
 	header("sign form");
 	try {
-		//	Sign form : YES
-		AForm	not_important("Shopping list", LOWEST_FORM_GRADE, LOWEST_FORM_GRADE);
-		print_F(not_important);
-		Bureaucrat	somedude("Randy? Or maybe Ralph?", LOWEST_BCT_GRADE);
-		print_B(somedude);
-		somedude.signForm(not_important);
-		print_F(not_important);
-
-		//	Sign form : NO (Grade too low)
-		AForm	very_important("Secret Document", 10, HIGHEST_FORM_GRADE);
-		print_F(very_important);
-		somedude.signForm(very_important);
-		print_F(very_important);
-
-		//	Promote "somedude" | Sign form : YES
-		std::cout << "PROMOTING RALPH (*or was it Randy?*)" << std::endl;
-		somedude.setGrade(10);
-		somedude.signForm(very_important);
-		print_F(very_important);
+		//	DO STUFF
 	}
 	catch (std::exception &e){
 		print_e(e);

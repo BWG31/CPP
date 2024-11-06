@@ -10,11 +10,12 @@ AForm::AForm() :
 	return ;
 }
 
-AForm::AForm(std::string name, int sign_grade, int execute_grade) :
+AForm::AForm(std::string name, int sign_grade, int execute_grade, std::string target) :
 	_name(name),
 	_signed(false),
 	_sign_grade(sign_grade),
-	_execute_grade(execute_grade)
+	_execute_grade(execute_grade),
+	_target(target)
 {
 	validateGrade(sign_grade);
 	validateGrade(execute_grade);
@@ -37,15 +38,19 @@ AForm::~AForm()
 //  =======| OPERATOR OVERLOADS |=======
 AForm &AForm::operator=(const AForm &rhs)
 {
-	this->_signed = rhs.getState();
+	if (this == &rhs)
+		return (*this);
+	_signed = rhs.getSignedState();
+	_target = rhs.getTarget();
 	return (*this);
 }
 
 std::ostream &operator<<(std::ostream &os, const AForm &other)
 {
-	os << "Form: " << other.getName() << "\t| signed: " << other.getState();
+	os << "Form: " << other.getName() << "\t| signed: " << other.getSignedState();
 	os << "\t| sign grade: " << other.getSignGrade();
 	os << "\t| exec grade: " << other.getExecGrade();
+	os << "\t| target: " << other.getTarget();
 	return (os);
 }
 
@@ -56,7 +61,7 @@ std::string AForm::getName() const
 	return (_name);
 }
 
-bool AForm::getState() const
+bool AForm::getSignedState() const
 {
 	return (_signed);
 }
@@ -71,6 +76,11 @@ int AForm::getExecGrade() const
 	return (_execute_grade);
 }
 
+std::string AForm::getTarget() const
+{
+	return (_target);
+}
+
 void AForm::validateGrade(int grade) const
 {
 	if (grade < HIGHEST_FORM_GRADE)
@@ -81,20 +91,29 @@ void AForm::validateGrade(int grade) const
 
 void AForm::beSigned(const Bureaucrat &B)
 {
-	if (B.getGrade() > this->getSignGrade())
+	if (B.getGrade() > getSignGrade())
 		throw GradeTooLowException();
-	else
-		this->_signed = true;
+	setSigned(true);
+}
+
+void AForm::setSigned(bool state)
+{
+	_signed = state;
+}
+
+void AForm::setTarget(std::string target)
+{
+	_target = target;
+}
+
+void AForm::execute(Bureaucrat const & executor)
+
+{
+	if (getSignedState() == false)
+		throw NotSignedException();
+	if (getExecGrade() < executor.getGrade())
+		throw GradeTooLowException();
+	std::cout << "EXECUTE" << std::endl;
 }
 
 //  ========| VIRTUAL METHODS |=========
-
-const char *AForm::GradeTooHighException::what() const throw()
-{
-	return ("Grade too high");
-}
-
-const char *AForm::GradeTooLowException::what() const throw()
-{
-	return ("Grade too low");
-}
