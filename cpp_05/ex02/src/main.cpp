@@ -26,10 +26,12 @@ void	test_constructors(void)
 	try {
 		ShrubberyCreationForm	ShrubA("abc");
 		ShrubberyCreationForm	ShrubC("123");
+		ShrubberyCreationForm	ShrubCopy(ShrubC);
+		ShrubberyCreationForm	ShrubDefault;
 		print_F(ShrubA);
 		print_F(ShrubC);
-		ShrubC = ShrubA;
-		print_F(ShrubC);
+		print_F(ShrubCopy);
+		print_F(ShrubDefault);
 	}
 	catch (std::exception &e){
 		print_e(e);
@@ -40,7 +42,10 @@ void	test_execute_form(void)
 {
 	header("sign form");
 	try {
-		//	DO STUFF
+		ShrubberyCreationForm	shrub_form("file1");
+		Bureaucrat				CEO("Boss", 1);
+		CEO.signForm(shrub_form);
+		shrub_form.execute(CEO);
 	}
 	catch (std::exception &e){
 		print_e(e);

@@ -8,7 +8,7 @@ OBJ_DIR		:=	obj/
 DEP_DIR 	:=	dep/
 
 CC			:=	c++
-CFLAGS		:=	-Wall -Wextra -Werror -std=c++98
+CFLAGS		=	-Wall -Wextra -Werror -std=c++98
 DFLAGS		:=	-MMD -MF
 DEP_FILE	=	$(DEP_DIR)$*.d
 RM			:=	rm -rf
@@ -47,5 +47,8 @@ fclean:			clean
 
 re:				fclean
 				@$(MAKE) all
+
+debug:			clean
+				@$(MAKE) CFLAGS="$(CFLAGS) -g" all
 
 .PHONY: all clean fclean re

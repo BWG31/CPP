@@ -31,7 +31,14 @@ ShrubberyCreationForm &ShrubberyCreationForm::operator=(const ShrubberyCreationF
 
 void ShrubberyCreationForm::executeAction()
 {
-    return ;
+    std::ofstream file(getTarget().append("_shrubbery"));    
+    if (!file)
+    {
+        std::cerr << "Unable to open shrubbery file" << std::endl;
+        return ;
+    }
+    file << "THIS IS A SHRUBBERY" << std::endl;
+    file.close();
 }
 
 //  ========| VIRTUAL METHODS |=========

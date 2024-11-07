@@ -113,7 +113,7 @@ void AForm::execute(Bureaucrat const & executor)
 		throw NotSignedException();
 	if (getExecGrade() < executor.getGrade())
 		throw GradeTooLowException();
-	std::cout << "EXECUTE" << std::endl;
+	executeAction();
 }
 
 //  ========| VIRTUAL METHODS |=========
