@@ -34,7 +34,7 @@ void ShrubberyCreationForm::executeAction() const
 	std::ofstream file((getTarget() + "_shrubbery").c_str());
 	if (!file)
 		throw ShrubFileError();
-	file << "THIS IS A SHRUBBERY" << std::endl;
+	file << XMAS_TREE << std::endl;
 	file.close();
 }
 
