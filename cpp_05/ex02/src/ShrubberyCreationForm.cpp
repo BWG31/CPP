@@ -2,10 +2,10 @@
 
 //  ==========| CONSTRUCTORS |==========
 ShrubberyCreationForm::ShrubberyCreationForm() : \
-	AForm("Shrub", required_sign, required_exec, "default_target") {}
+	AForm("Shrubbery Creation", required_sign, required_exec, "default_target") {}
 
 ShrubberyCreationForm::ShrubberyCreationForm(std::string target) : \
-	AForm("Shrub", required_sign, required_exec, target) {}
+	AForm("Shrubbery Creation", required_sign, required_exec, target) {}
 
 ShrubberyCreationForm::ShrubberyCreationForm(const ShrubberyCreationForm &other) : \
 	AForm(other.getName(), other.getSignGrade(), other.getExecGrade(), other.getTarget())

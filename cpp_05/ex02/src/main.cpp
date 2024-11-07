@@ -1,12 +1,14 @@
 #include "Bureaucrat.hpp"
 #include "AForm.hpp"
 #include "ShrubberyCreationForm.hpp"
+#include "RobotomyRequestForm.hpp"
 #include "PresidentialPardonForm.hpp"
 #include <iomanip>
 
 //	TESTS
 void	test_constructors(void);
 void	test_shrubbery(void);
+void	test_robotomy(void);
 void	test_presidential_pardon(void);
 
 //	HELPERS
@@ -20,6 +22,7 @@ int	main(void)
 	test_constructors();
 	test_shrubbery();
 	test_presidential_pardon();
+	test_robotomy();
 	return (0);
 }
 
@@ -52,6 +55,24 @@ void	test_shrubbery(void)
 	
 		Bureaucrat	peon("Peon", 150);
 		peon.executeForm(shrub_form);	// Rank too low, should throw
+	}
+	catch (std::exception &e){
+		print_e(e);
+	}
+}
+
+void	test_robotomy(void)
+{
+	header("robotomy");
+	try {
+		RobotomyRequestForm	robotomy("Randle McMurphy");
+		Bureaucrat			nurse("Ratched", 30);
+	
+		nurse.signForm(robotomy);
+		nurse.executeForm(robotomy);	// Should execute form OK
+	
+		Bureaucrat			chief("Chief", 100);
+		chief.executeForm(robotomy);	//	Rank too low, should throw
 	}
 	catch (std::exception &e){
 		print_e(e);
