@@ -21,13 +21,13 @@ class ShrubberyCreationForm : public AForm
 		static const int 	required_sign = 145;
 		static const int	required_exec = 137;
 
-		class ShrubFileError : public std::exception
-		{
-			public:
-				virtual const char *what() const throw(){
-					return ("Unable to open target file");
-				}
-		};
+		class ShrubFileError;		
+};
+
+class ShrubberyCreationForm::ShrubFileError : public std::exception
+{
+	public:
+		virtual const char *what() const throw();
 };
 
 #endif

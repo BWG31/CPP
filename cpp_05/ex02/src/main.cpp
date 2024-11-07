@@ -42,7 +42,7 @@ void	test_shrubbery(void)
 {
 	header("sign form");
 	try {
-		ShrubberyCreationForm	shrub_form("file1");
+		ShrubberyCreationForm	shrub_form("garden");
 		Bureaucrat				CEO("Boss", 1);
 		CEO.signForm(shrub_form);
 		CEO.executeForm(shrub_form);	// Should execute form OK

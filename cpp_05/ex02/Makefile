@@ -1,6 +1,7 @@
 NAME	=	forms
 
-SRC		=	main Bureaucrat AForm AForm_exceptions ShrubberyCreationForm
+SRC		=	main Bureaucrat AForm ShrubberyCreationForm\
+			Bureaucrat_exceptions AForm_exceptions ShrubberyCreationForm_exceptions
 
 INC_DIR		:=	inc/
 SRC_DIR		:=	src/
