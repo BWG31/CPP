@@ -14,12 +14,20 @@ class ShrubberyCreationForm : public AForm
 
 		ShrubberyCreationForm &operator=(const ShrubberyCreationForm &rhs);
 
-		virtual void executeAction();
+		virtual void executeAction() const;
 	
 	private:
 
 		static const int 	required_sign = 145;
 		static const int	required_exec = 137;
+
+		class ShrubFileError : public std::exception
+		{
+			public:
+				virtual const char *what() const throw(){
+					return ("Unable to open target file");
+				}
+		};
 };
 
 #endif

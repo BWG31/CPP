@@ -106,8 +106,7 @@ void AForm::setTarget(std::string target)
 	_target = target;
 }
 
-void AForm::execute(Bureaucrat const & executor)
-
+void AForm::execute(Bureaucrat const & executor) const
 {
 	if (getSignedState() == false)
 		throw NotSignedException();

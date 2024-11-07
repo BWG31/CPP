@@ -5,7 +5,7 @@
 
 //	TESTS
 void	test_constructors(void);
-void	test_execute_form(void);
+void	test_shrubbery(void);
 
 //	HELPERS
 void	header(std::string name);
@@ -16,7 +16,7 @@ void	print_e(std::exception &e);
 int	main(void)
 {
 	test_constructors();
-	test_execute_form();
+	test_shrubbery();
 	return (0);
 }
 
@@ -38,14 +38,17 @@ void	test_constructors(void)
 	}
 }
 
-void	test_execute_form(void)
+void	test_shrubbery(void)
 {
 	header("sign form");
 	try {
 		ShrubberyCreationForm	shrub_form("file1");
 		Bureaucrat				CEO("Boss", 1);
 		CEO.signForm(shrub_form);
-		shrub_form.execute(CEO);
+		CEO.executeForm(shrub_form);	// Should execute form OK
+	
+		Bureaucrat	peon("Peon", 150);
+		peon.executeForm(shrub_form);	// Rank too low, should throw
 	}
 	catch (std::exception &e){
 		print_e(e);
