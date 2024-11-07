@@ -3,6 +3,8 @@
 
 # include "AForm.hpp"
 # include <fstream>
+# include <cstdlib>
+# include <unistd.h>
 
 class RobotomyRequestForm : public AForm
 {
@@ -20,6 +22,16 @@ class RobotomyRequestForm : public AForm
 
 		static const int 	required_sign = 72;
 		static const int	required_exec = 45;
+
+		int	getRandom() const;
+
+		class RobotomyFailed;
+};
+
+class RobotomyRequestForm::RobotomyFailed : public std::exception
+{
+	public:
+		virtual const char *what() const throw();
 };
 
 #endif

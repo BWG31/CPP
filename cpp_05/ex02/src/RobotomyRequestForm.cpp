@@ -31,7 +31,17 @@ RobotomyRequestForm &RobotomyRequestForm::operator=(const RobotomyRequestForm &r
 
 void RobotomyRequestForm::executeAction() const
 {
-	std::cout << getTarget() << " BEEP BEEP BOP" << std::endl;
+	if (getRandom() % 2)
+		std::cout << "Vrrr...VRRRRR... " << '\n' \
+		<< getTarget() << " has been robotomized successfully" << std::endl;
+	else
+		throw RobotomyFailed();
+}
+
+int	RobotomyRequestForm::getRandom() const
+{
+	srand(time(NULL) + getpid());
+	return (rand());
 }
 
 //  ========| VIRTUAL METHODS |=========

@@ -10,6 +10,7 @@ void	test_constructors(void);
 void	test_shrubbery(void);
 void	test_robotomy(void);
 void	test_presidential_pardon(void);
+void	check_randomizer_accuracy(void);
 
 //	HELPERS
 void	header(std::string name);
@@ -23,6 +24,7 @@ int	main(void)
 	test_shrubbery();
 	test_presidential_pardon();
 	test_robotomy();
+	check_randomizer_accuracy();
 	return (0);
 }
 
@@ -96,6 +98,20 @@ void	test_presidential_pardon(void)
 	}
 }
 
+void	check_randomizer_accuracy(void)
+{
+	header("Randomizer accuracy check");
+	RobotomyRequestForm robot;
+	int fail_count = 0;
+	int iterations = 100000;
+	srand(time(NULL) + getpid());
+	for (int i = 0; i < iterations; i++)
+	{
+		if (rand() % 2)
+			fail_count++;
+	}
+	std::cout << (double)fail_count / iterations * 100 << " % fail rate" << std::endl;
+}
 
 void	header(std::string name)
 {
