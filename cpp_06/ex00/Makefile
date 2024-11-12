@@ -1,6 +1,6 @@
 NAME	=	convert
 
-SRC		=	main ScalarConverter
+SRC		=	main ScalarConverter helpers
 
 INC_DIR		:=	inc/
 SRC_DIR		:=	src/
@@ -47,5 +47,8 @@ fclean:			clean
 
 re:				fclean
 				@$(MAKE) all
+
+debug:			clean
+				@$(MAKE) CFLAGS="$(CFLAGS) -g" all
 
 .PHONY: all clean fclean re
