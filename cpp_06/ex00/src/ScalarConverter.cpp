@@ -1,7 +1,25 @@
 #include "ScalarConverter.hpp"
 
 //  ==========| CONSTRUCTORS |==========
+
 ScalarConverter::ScalarConverter(){}
+
+ScalarConverter::ScalarConverter(const ScalarConverter &other)
+{
+	*this = other;
+}
+
+//  ===========| DESTRUCTOR |===========
+
+ScalarConverter::~ScalarConverter() {}
+
+//  =======| OPERATOR OVERLOADS |=======
+
+ScalarConverter &ScalarConverter::operator=(const ScalarConverter &rhs)
+{
+	(void)rhs;
+	return *this;
+}
 
 //  ============| METHODS |=============
 

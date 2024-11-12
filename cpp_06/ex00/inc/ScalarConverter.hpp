@@ -19,6 +19,9 @@ class ScalarConverter
 		static void convert(std::string str);
 	private:
 		ScalarConverter();
+		ScalarConverter(const ScalarConverter &other);
+		~ScalarConverter();
+		ScalarConverter &operator=(const ScalarConverter &rhs);
 };
 
 typedef enum e_type
