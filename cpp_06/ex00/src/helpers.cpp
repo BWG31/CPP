@@ -1,4 +1,4 @@
-#include "helpers.h"
+#include "ScalarConverter.hpp"
 
 t_type	getType(std::string str)
 {
@@ -34,7 +34,6 @@ bool    isFloat(std::string str)
     try {
         convertToFloat(str);
     } catch (std::invalid_argument &e){
-        std::cerr << "isFloat: " << e.what() << std::endl;
         return (false);
     }
     return (true);
@@ -45,7 +44,6 @@ bool    isDouble(std::string str)
     try {
         convertToDouble(str);
     } catch (std::invalid_argument &e){
-        std::cerr << "isDouble: " << e.what() << std::endl;
         return (false);
     }
     return (true);
@@ -69,7 +67,7 @@ float   convertToFloat(std::string str)
         value != -std::numeric_limits<float>::infinity())
     {
         if (value < -std::numeric_limits<float>::max())
-            throw std::invalid_argument("Below float min");
+            throw std::invalid_argument("Below -(float max)");
         if (value > std::numeric_limits<float>::max())
             throw std::invalid_argument("Above float max");
     }

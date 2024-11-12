@@ -1,6 +1,6 @@
 NAME	=	convert
 
-SRC		=	main ScalarConverter helpers
+SRC		=	main ScalarConverter helpers print
 
 INC_DIR		:=	inc/
 SRC_DIR		:=	src/
