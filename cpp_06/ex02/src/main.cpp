@@ -7,11 +7,16 @@
 #include <ctime>
 #include <unistd.h>
 
-Base *generate(void);
+Base	*generate(void);
+void	identify(Base *p);
+void 	identify(Base &p);
+void	print_identity(const char c);
 
 int main(void)
 {
 	Base *ptr = generate();
+	identify(ptr);
+	identify(*ptr);
 	delete ptr;
 	return (0);
 }
@@ -37,4 +42,48 @@ Base *generate(void)
 	}
 	std::cout << "num: " << num << std::endl;
 	return (ptr);
+}
+
+void identify(Base *p)
+{
+	Base *tmp = NULL;
+
+	tmp = dynamic_cast<A*>(p);
+	if (tmp)
+		return (print_identity('A'));
+	tmp = dynamic_cast<B*>(p);
+	if (tmp)
+		return (print_identity('B'));
+	tmp = dynamic_cast<C*>(p);
+	if (tmp)
+		return (print_identity('C'));
+	return (print_identity(0));
+}
+
+void identify(Base &p)
+{
+	try{
+		dynamic_cast<A&>(p);
+		print_identity('A');
+	} catch (...){
+		try{
+			dynamic_cast<B&>(p);
+			return (print_identity('B'));
+		} catch (...){
+			try{
+				dynamic_cast<C&>(p);
+				return (print_identity('C'));
+			} catch (...){
+				return (print_identity(0));
+			}
+		}
+	}
+}
+
+void print_identity(const char c)
+{
+	if (c == 0)
+		std::cout << "Could not find identity" << std::endl;
+	else
+		std::cout << "Result: " << c << std::endl;
 }
