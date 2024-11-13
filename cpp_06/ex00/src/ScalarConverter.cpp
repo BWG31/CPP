@@ -30,7 +30,7 @@ void ScalarConverter::convert(std::string str)
 
 	switch (type){
 		case CHAR:
-			value = str.front();
+			value = str[0];
 			break ;
 		case INTEGER:
 			value = std::atoi(str.c_str());

@@ -15,7 +15,7 @@ t_type	getType(std::string str)
 
 bool    isChar(std::string str)
 {
-    return (str.size() == 1 && !std::isdigit(str.front()));
+    return (str.size() == 1 && !std::isdigit(str[0]));
 }
 
 bool    isInt(std::string str)

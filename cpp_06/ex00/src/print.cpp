@@ -66,7 +66,7 @@ std::string dynamicPrecision(double value)
 	std::string str = ss.str();
 
 	str.erase(str.find_last_not_of('0') + 1);
-	if (str.back() == '.')
+	if (str[str.length() - 1] == '.')
 		str += '0';
 	return (str);
 }

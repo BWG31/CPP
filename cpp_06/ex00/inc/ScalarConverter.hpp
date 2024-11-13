@@ -10,6 +10,7 @@
 # include <stdexcept>
 # include <limits>
 # include <cmath>
+# include <errno.h>
 
 # define MAX_PRECISION (20)
 
