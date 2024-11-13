@@ -6,14 +6,14 @@
 class Serializer
 {
 	public:
-		Serializer &operator=(const Serializer &rhs);
+		static uintptr_t serialize(Data* ptr);
+		static Data* deserialize(uintptr_t raw);
 	private:
 		Serializer();
 		Serializer(const Serializer &other);
 		~Serializer();
+		Serializer &operator=(const Serializer &rhs);
 	
-		static uintptr_t serialize(Data* ptr);
-		static Data* deserialize(uintptr_t raw);
 };
 
 #endif

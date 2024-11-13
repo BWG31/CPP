@@ -30,7 +30,8 @@ std::ostream &operator<<(std::ostream &os, const Data &rhs)
 {
     os << "== DATA ==\n" << "number: " << rhs.getNumber() << '\n';
     os << "character: " << rhs.getChar() << '\n';
-    os << "secret message: " << rhs.getMessage() << std::endl;
+    os << "secret message: " << rhs.getMessage();
+    return (os);
 }
 
 //  ============| METHODS |=============

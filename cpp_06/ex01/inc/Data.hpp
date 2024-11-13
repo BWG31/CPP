@@ -2,7 +2,9 @@
 # define DATA_HPP
 
 # include <string>
+# include <iostream>
 # include <iomanip>
+# include <stdint.h>
 
 class Data
 {
