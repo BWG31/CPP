@@ -1,18 +1,30 @@
 #ifndef ARRAY_HPP
 # define ARRAY_HPP
 
+#include <cstddef>
+#include <iostream>
+#include <stdexcept>
+
 template <class T> class Array
 {
 	public:
 		Array();
-		Array(const Array &other);
+		Array(unsigned int n);
+		Array(const Array<T> &other);
 		~Array();
 
-		Array &operator=(const Array &rhs);
+		Array<T> &operator=(const Array &rhs);
+		T &operator[](size_t index);
+		const T &operator[](size_t index) const;
+
+		size_t	size() const;
 	private:
-		int	_size;
-		T	*elements;
+		size_t	_size;
+		T		*_elements;
 };
+
+template <class T>
+std::ostream &operator<<(std::ostream &os, const Array<T> &rhs);
 
 #include "Array.tpp"
 

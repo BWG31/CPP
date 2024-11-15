@@ -1,6 +1,6 @@
 NAME	=	runprogram
 
-SRC		=	main
+SRC		=	main tests
 
 INC_DIR		:=	inc/
 SRC_DIR		:=	src/
