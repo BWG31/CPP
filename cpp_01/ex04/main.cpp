@@ -1,7 +1,6 @@
 #include <iostream>
 #include <string>
 #include <fstream>
-#include <cstring>
 
 #define RESET	"\033[0m"
 #define RED		"\033[31m"
@@ -18,11 +17,13 @@ int main(int argc, char **argv)
 	std::string		new_file = filename + ".replace";
 	std::string		s1 = argv[2];
 	std::string		s2 = argv[3];
-	std::ifstream	in_file(filename.c_str());
-	std::ofstream	out_file(new_file.c_str());
+	std::ifstream	in_file;
+	std::ofstream	out_file;
 
+	in_file.open(filename);
 	if (in_file.is_open())
 	{
+		out_file.open(new_file);
 		if (out_file.is_open())
 		{
 			for (std::string line; getline(in_file, line); )
