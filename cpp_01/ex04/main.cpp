@@ -1,6 +1,7 @@
 #include <iostream>
 #include <string>
 #include <fstream>
+#include <cstring>
 
 #define RESET	"\033[0m"
 #define RED		"\033[31m"
@@ -10,20 +11,18 @@ int	invalid_input();
 int file_error(std::string str);
 int main(int argc, char **argv)
 {
-	if (argc != 4 || !strlen(argv[2]) || !strlen(argv[3]))
+	if (argc != 4 || !std::strlen(argv[2]))
 		return (invalid_input());
 	
 	std::string		filename = argv[1];
 	std::string		new_file = filename + ".replace";
 	std::string		s1 = argv[2];
 	std::string		s2 = argv[3];
-	std::ifstream	in_file;
-	std::ofstream	out_file;
+	std::ifstream	in_file(filename.c_str());
+	std::ofstream	out_file(new_file.c_str());
 
-	in_file.open(filename);
 	if (in_file.is_open())
 	{
-		out_file.open(new_file);
 		if (out_file.is_open())
 		{
 			for (std::string line; getline(in_file, line); )
@@ -44,8 +43,6 @@ int main(int argc, char **argv)
 	}
 	else
 		return (file_error(filename));
-	in_file.close();
-	out_file.close();
 	return (0);
 }
 
