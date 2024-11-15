@@ -63,15 +63,15 @@ void identify(Base *p)
 void identify(Base &p)
 {
 	try{
-		dynamic_cast<A&>(p);
+		(void)dynamic_cast<A&>(p);
 		print_identity('A');
 	} catch (...){
 		try{
-			dynamic_cast<B&>(p);
+			(void)dynamic_cast<B&>(p);
 			return (print_identity('B'));
 		} catch (...){
 			try{
-				dynamic_cast<C&>(p);
+				(void)dynamic_cast<C&>(p);
 				return (print_identity('C'));
 			} catch (...){
 				return (print_identity(0));
