@@ -1,26 +1,18 @@
 #ifndef EASYFIND_HPP
 # define EASYFIND_HPP
 
+# include <algorithm>
+
 template <typename T>
 typename T::iterator easyfind(T &container, int num)
 {
-    typename T::iterator iter;
-
-    for (iter = container.begin(); iter != container.end(); ++iter)
-        if (*iter == num)
-            break;
-    return iter;
+    return (std::find(container.begin(), container.end(), num));
 }
 
 template <typename T>
 typename T::const_iterator easyfind(const T &container, int num)
 {
-    typename T::const_iterator iter;
-
-    for (iter = container.begin(); iter != container.end(); ++iter)
-        if (*iter == num)
-            break;
-    return iter;
+    return (std::find(container.begin(), container.end(), num));
 }
 
 #endif
