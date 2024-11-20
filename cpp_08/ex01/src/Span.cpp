@@ -23,9 +23,9 @@ Span &Span::operator=(const Span &rhs)
 
 std::ostream &operator<<(std::ostream &os, Span &rhs)
 {
-	os << "<< SPAN >>\n";
+	os << "[ SPAN ] :";
 	if (rhs.getNumbers().size() == 0)
-		os << "span is empty";
+		os << " empty";
 	else
 	{
 		for (unsigned int i = 0; i < rhs.getNumbers().size(); ++i)
