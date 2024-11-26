@@ -1,28 +1,14 @@
 #include "PmergeMe.hpp"
 
-//  ==========| CONSTRUCTORS |==========
-PmergeMe::PmergeMe() {}
+//  ==========| VECTOR |==========
 
-PmergeMe::PmergeMe(const PmergeMe &other)
+void PmergeMe(const std::vector<int> &input)
 {
-    *this = other;
+    std::vector<int> values(input);
+
+    // split values into sorted pairs b1|a1
+        // leftover stored seperately b(n/2 + 1)
+    // Create main chain b1 > a1..a(n/2)
+    // Arrange sequence for remaining b elements
+    // Binary insert remaining elements to main chain
 }
-
-//  ===========| DESTRUCTOR |===========
-PmergeMe::~PmergeMe() {}
-
-//  =======| OPERATOR OVERLOADS |=======
-PmergeMe &PmergeMe::operator=(const PmergeMe &rhs)
-{
-    this->values = rhs.values;
-    return *this;
-}
-
-//  ============| METHODS |=============
-
-std::vector<int> &PmergeMe::getValues()
-{
-    return this->values;
-}
-
-//  ========| VIRTUAL METHODS |=========

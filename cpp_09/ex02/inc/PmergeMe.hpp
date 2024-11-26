@@ -3,19 +3,8 @@
 
 # include <vector>
 
-class PmergeMe
-{
-	public:
-		PmergeMe();
-		PmergeMe(const PmergeMe &other);
-		~PmergeMe();
+void PmergeMe(const std::vector<int> &input);
 
-		PmergeMe &operator=(const PmergeMe &rhs);
-
-		std::vector<int> &getValues();
-
-	private:
-		std::vector<int> values;
-};
+// alternative container handling here
 
 #endif
