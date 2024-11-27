@@ -8,7 +8,7 @@ PmergeMe::PmergeMe(const PmergeMe &other)
 	*this = other;
 }
 
-PmergeMe::PmergeMe(const std::vector<int> &input) :
+PmergeMe::PmergeMe(const int_vector &input) :
 	values(input),
 	leftover(false),
 	leftover_value(-1) {}
@@ -21,7 +21,7 @@ PmergeMe &PmergeMe::operator=(const PmergeMe &rhs)
 {
 	if (this != &rhs)
 	{
-		this->pairs = rhs.pairs;
+		values = rhs.values;
 		this->leftover = rhs.leftover;
 		this->leftover_value = rhs.leftover_value;
 	}
@@ -30,10 +30,12 @@ PmergeMe &PmergeMe::operator=(const PmergeMe &rhs)
 
 std::ostream &operator<<(std::ostream &os, const PmergeMe &rhs)
 {
-    for (std::size_t i = 0, size = rhs.getPairs().size(); i < size; ++i)
+	os << "values:";
+    for (std::size_t i = 0, size = rhs.getValues().size(); i < size; ++i)
     {
-        os << rhs.getPairs()[i].first << " | " << rhs.getPairs()[i].second << std::endl;
+        os << ' ' << rhs.getValues()[i];
     }
+	os << std::endl;
     if (rhs.getLeftover())
 	{
     	os << "leftover: " << rhs.getLeftoverValue() << std::endl;
@@ -45,7 +47,7 @@ std::ostream &operator<<(std::ostream &os, const PmergeMe &rhs)
 
 void PmergeMe::sort()
 {
-	splitIntoPairs();
+	sortPairs();
 
 	/*
 		split values into sorted pairs b1|a1
@@ -56,23 +58,23 @@ void PmergeMe::sort()
 	*/
 }
 
-void PmergeMe::splitIntoPairs()
+void PmergeMe::sortPairs()
 {
-	for (std::size_t i = 1; i < values.size(); ++i)
-    {
-        pairs.push_back(std::make_pair(values[i - 1], values[i]));
-        if (++i == values.size() - 1)
-        {
-            leftover_value = values[i];
-            leftover = true;
-            break;
-        }
-    }
+	for (
+		int_vector::iterator it = values.begin(),
+		end = (values.size() % 2) ? values.end() - 1 : values.end();
+		it != end;
+		it += 2
+	)
+	{
+		if (*it > *(it + 1))
+			std::swap(*it, *(it + 1));
+	}
 }
 
 //  ========| GETTERS |=========
 
-const v_pairs &PmergeMe::getPairs() const { return pairs; };
+const int_vector &PmergeMe::getValues() const {return values; };
 
 const bool &PmergeMe::getLeftover() const { return leftover; };
 

@@ -6,7 +6,7 @@
 # include <iostream>
 # include <iomanip>
 
-typedef std::vector<std::pair<int, int> > v_pairs;
+typedef std::vector<int> int_vector;
 
 class PmergeMe
 {
@@ -18,17 +18,16 @@ class PmergeMe
 		void sort();
 
 		// getters
-		const v_pairs &getPairs() const;
+		const int_vector &getValues() const;
 		const bool &getLeftover() const;
 		const int &getLeftoverValue() const;
 
 	private:
-		std::vector<int> values;
-		v_pairs	pairs;
-		bool	leftover;
-		int		leftover_value;
-		
-		void splitIntoPairs();
+		int_vector	values;
+		bool		leftover;
+		int			leftover_value;
+
+		void sortPairs();
 
 		// Unused coplien elements
 		PmergeMe();
