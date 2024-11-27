@@ -7,12 +7,15 @@
 # include <iomanip>
 
 typedef std::vector<int> int_vector;
+typedef int_vector::iterator iv_iterator;
+typedef std::vector<std::pair<int, int> > pair_vector;
+typedef pair_vector::iterator pv_iterator;
 
 class PmergeMe
 {
 	public:
 		// Constructors | Destructor
-		PmergeMe(const std::vector<int> &input);
+		PmergeMe(const int_vector &input);
 		~PmergeMe();
 
 		void sort();
@@ -24,10 +27,17 @@ class PmergeMe
 
 	private:
 		int_vector	values;
+		pair_vector paired_values;
 		bool		leftover;
 		int			leftover_value;
 
-		void sortPairs();
+		void makePairs();
+		void mergeInsertPairs(pv_iterator it, pv_iterator end);
+		void baseCase(pv_iterator it, size_t size);
+
+		// Templated methods
+		void sortSinglePairs(pv_iterator it, pv_iterator end);
+		void sortSinglePairs(iv_iterator it, iv_iterator end);
 
 		// Unused coplien elements
 		PmergeMe();

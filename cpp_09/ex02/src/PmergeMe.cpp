@@ -43,11 +43,12 @@ std::ostream &operator<<(std::ostream &os, const PmergeMe &rhs)
 	return os;
 }
 
-//  ============| METHODS |=============
+//  ============| PUBLIC METHODS |=============
 
 void PmergeMe::sort()
 {
-	sortPairs();
+	sortSinglePairs(values.begin(), values.end());
+	makePairs();
 
 	/*
 		split values into sorted pairs b1|a1
@@ -58,18 +59,62 @@ void PmergeMe::sort()
 	*/
 }
 
-void PmergeMe::sortPairs()
+//  ============| PRIVATE METHODS |=============
+
+void PmergeMe::sortSinglePairs(iv_iterator it, iv_iterator end)
 {
-	for (
-		int_vector::iterator it = values.begin(),
-		end = (values.size() % 2) ? values.end() - 1 : values.end();
+	for (end = (values.size() % 2) ? end - 1 : end;
 		it != end;
-		it += 2
-	)
+		it += 2)
 	{
 		if (*it > *(it + 1))
 			std::swap(*it, *(it + 1));
 	}
+};
+
+void PmergeMe::sortSinglePairs(pv_iterator it, pv_iterator end)
+{
+	for (end = (values.size() % 2) ? end - 1 : end;
+		it != end;
+		it += 2)
+	{
+		if (it.base()->second > (it + 1).base()->second)
+			std::swap(*it, *(it + 1));
+	}
+};
+
+void PmergeMe::makePairs()
+{
+	for (std::size_t i = 1; i < values.size(); ++i)
+    {
+        paired_values.push_back(std::make_pair(values[i - 1], values[i]));
+        if (++i == values.size() - 1)
+        {
+            leftover_value = values[i];
+            leftover = true;
+            break;
+        }
+    }
+}
+
+void PmergeMe::mergeInsertPairs(pv_iterator it, pv_iterator end)
+{
+	size_t size = end - it;
+
+	if (size < 3)
+		return baseCase(it, size);
+	
+	// paired_values.insert()
+}
+
+void PmergeMe::baseCase(pv_iterator it, size_t size)
+{
+	if (size == 2)
+	{
+		if (it.base()->second > (it + 1).base()->second)
+			std::swap(*it, *(it + 1));
+	}
+	return ;
 }
 
 //  ========| GETTERS |=========
