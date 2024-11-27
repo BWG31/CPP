@@ -12,6 +12,9 @@ int main(int argc, char **argv)
 	if (!validate_input(input, argc, argv))
 		return 1;
 	display_before(input);
-	PmergeMe(input);
+
+	PmergeMe v(input);
+
+	std::cout << v;
 	return 0;
 }
