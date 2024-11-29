@@ -29,9 +29,8 @@ bool validate_input(int_vector &input, int argc, char **argv)
 	return true;
 }
 
-void display_before(int_vector &input)
+void print_vector(int_vector &input)
 {
-	std::cout << "Before:\t";
 	for (int_vector::iterator it = input.begin(); it != input.end(); ++it)
 		std::cout << ' ' << *it;
 	std::cout << std::endl;

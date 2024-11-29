@@ -10,11 +10,12 @@
 typedef std::vector<int> int_vector;
 typedef int_vector::iterator iv_iterator;
 
-void PmergeMe(int_vector &vec, size_t block_size);
+void PmergeMe(int_vector &nums, size_t block_size);
 
+void baseCase(int_vector &nums, size_t block_size);
 void sortSinglePairs(int_vector &nums, size_t block_size);
 void constructMainChain(int_vector &main_chain, int_vector &nums, size_t block_size);
-
+void binaryInsert(int_vector &main_chain, int_vector &nums, size_t block_size);
 
 // TESTERS
 void printVector(int_vector &vec);

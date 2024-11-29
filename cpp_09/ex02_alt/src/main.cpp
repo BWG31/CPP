@@ -4,15 +4,19 @@
 
 // main helpers
 bool validate_input(int_vector &input, int argc, char **argv);
-void display_before(int_vector &input);
+void print_vector(int_vector &input);
 
 int main(int argc, char **argv)
 {
 	int_vector input;
 	if (!validate_input(input, argc, argv))
 		return 1;
-	display_before(input);
+	std::cout << "Before:\t";
+	print_vector(input);
 
 	PmergeMe(input, 1);
+
+	std::cout << "After:\t";
+	print_vector(input);
 	return 0;
 }
