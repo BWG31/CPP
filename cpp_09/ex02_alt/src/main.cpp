@@ -13,9 +13,6 @@ int main(int argc, char **argv)
 		return 1;
 	display_before(input);
 
-	PmergeMe v(input);
-	std::cout << v;
-	v.sort();
-	std::cout << v;
+	PmergeMe(input, 1);
 	return 0;
 }

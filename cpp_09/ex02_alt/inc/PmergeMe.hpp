@@ -5,19 +5,18 @@
 # include <utility>
 # include <iostream>
 # include <iomanip>
+# include <algorithm>
 
 typedef std::vector<int> int_vector;
 typedef int_vector::iterator iv_iterator;
-typedef std::vector<std::pair<int, int> > pair_vector;
-typedef pair_vector::iterator pv_iterator;
 
-void PmergeMe(int_vector vec);
+void PmergeMe(int_vector &vec, size_t block_size);
 
-pair_vector makePairs(int_vector &vec);
-void mergeInsertPairs(pv_iterator it, pv_iterator end);
-void baseCase(pv_iterator it, size_t size);
+void sortSinglePairs(int_vector &nums, size_t block_size);
+void constructMainChain(int_vector &main_chain, int_vector &nums, size_t block_size);
 
-void sortSinglePairs(pv_iterator it, pv_iterator end);
-void sortSinglePairs(iv_iterator it, iv_iterator end);
+
+// TESTERS
+void printVector(int_vector &vec);
 
 #endif

@@ -1,61 +1,59 @@
 #include "PmergeMe.hpp"
 
-void PmergeMe(int_vector &vec)
+void PmergeMe(int_vector &nums, size_t block_size)
 {
-	/*
-		sortSinglePairs(vec.begin(), vec.end());
-		paired_values = makePairs(vec, leftover);
-		subvector = largestElementsVector(vec);
-		PmergeMe(subvector);
-		rearrangePairedValues(paired_values, subvector);
-		vec.empty();
-		constructMainChain(vec, paired_values);
-		binaryInsert(vec, paired_values, leftover);
-	*/
+	size_t		size = nums.size() / block_size;
+	int_vector	main_chain;
+	bool		leftover = false;
+	int 		leftover_value = -1;
+
+	// Base case
+	sortSinglePairs(nums, block_size);
+	PmergeMe(nums, block_size * 2);
+	constructMainChain(main_chain, nums, block_size);
+	binaryInsert(main_chain, nums, block_size);
 }
 
-void sortSinglePairs(iv_iterator it, iv_iterator end)
+void sortSinglePairs(int_vector &nums, size_t block_size)
 {
-	for (end = (values.size() % 2) ? end - 1 : end;
-		it != end;
-		it += 2)
+	for (
+		iv_iterator it = nums.begin() + block_size - 1, end = nums.end();
+		it < end - block_size;
+		it += block_size * 2
+	)
 	{
-		if (*it > *(it + 1))
-			std::swap(*it, *(it + 1));
+		if (*it > (*it + block_size))
+			std::swap_ranges(it, it + block_size -1, it + block_size);
 	}
 };
 
-void sortSinglePairs(pv_iterator it, pv_iterator end)
+void constructMainChain(int_vector &main_chain, int_vector &nums, size_t block_size)
 {
-	for (end = (values.size() % 2) ? end - 1 : end;
-		it != end;
-		it += 2)
+	iv_iterator first = nums.begin() + block_size - 1;
+	main_chain.insert(main_chain.end(), first, first + block_size - 1);
+	nums.erase(first, first + block_size - 1);
+	for (
+		iv_iterator it = nums.begin();
+		it < nums.end();
+		it += block_size
+	)
 	{
-		if (it.base()->second > (it + 1).base()->second)
-			std::swap(*it, *(it + 1));
+		main_chain.insert(main_chain.end(), it, it + block_size - 1);
+		nums.erase(it, it + block_size - 1);
+		it = nums.begin();
 	}
-};
-
-void makePairs(int_vector vec)
-{
-	for (std::size_t i = 1; i < vec.size(); ++i)
-    {
-        paired_values.push_back(std::make_pair(vec[i - 1], vec[i]));
-        if (++i == vec.size() - 1)
-        {
-            leftover_value = vec[i];
-            leftover = true;
-            break;
-        }
-    }
 }
 
-void baseCase(pv_iterator it, size_t size)
+void binaryInsert(int_vector &main_chain, int_vector &nums, size_t block_size)
 {
-	if (size == 2)
-	{
-		if (it.base()->second > (it + 1).base()->second)
-			std::swap(*it, *(it + 1));
-	}
-	return ;
+	// for ()
+}
+
+// TESTERS
+void printVector(int_vector &vec)
+{
+	std::cout << "<< PRINT VECTOR >>\n";
+	for (iv_iterator it = vec.begin(); it != vec.end(); ++it)
+		std::cout << " | " << *it;
+	std::cout << " |" << std::endl;
 }
