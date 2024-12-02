@@ -13,6 +13,7 @@ void PmergeMe(int_vector &nums, size_t block_size)
 	PmergeMe(nums, block_size * 2);
 	constructMainChain(main_chain, nums, block_size);
 	binaryInsert(main_chain, nums, block_size);
+	nums = main_chain;
 }
 
 void baseCase(int_vector &nums, size_t block_size)
@@ -58,8 +59,9 @@ void constructMainChain(int_vector &main_chain, int_vector &nums, size_t block_s
 	)
 	{
 		main_chain.insert(main_chain.end(), it - offset, it + 1);
-		nums.erase(it - offset, it + 1);
-		it = nums.begin();
+		size_t tmp = it - nums.begin();
+		nums.erase(it - offset, it + 1); // Invalidates iterators
+		it = nums.begin() + tmp;
 	}
 }
 
@@ -73,9 +75,9 @@ void binaryInsert(int_vector &main_chain, int_vector &nums, size_t block_size)
 	)
 	{
 		/*
-			Bug below: lower_bound is iterating 1 by 1, instead of by last element of block
+			-offset causing segfault when inserting at beginning of vector (negative index)
 		*/
-		main_chain.insert(std::lower_bound(nums.begin(), nums.end(), *it) - offset, it - offset, it + 1);
+		main_chain.insert(std::lower_bound(main_chain.begin(), main_chain.end(), *it) - offset, it - offset, it + 1);
 		nums.erase(it - offset, it + 1);
 		it = nums.begin();
 	}
