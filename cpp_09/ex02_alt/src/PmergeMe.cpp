@@ -3,11 +3,18 @@
 void PmergeMe(int_vector &nums, size_t block_size)
 {
 	int_vector	main_chain;
+	int_vector	leftovers;
 
 	if (nums.size() / 2 <= block_size)
 		return baseCase(nums, block_size);
+	if (nums.size() % (block_size * 2))
+	{
+		leftovers.insert(leftovers.end(), nums.end() - block_size, nums.end());
+		nums.erase(nums.end() - block_size, nums.end());
+	}
 	sortSinglePairs(nums, block_size);
 	PmergeMe(nums, block_size * 2);
+	nums.insert(nums.end(), leftovers.begin(), leftovers.end());
 	constructMainChain(main_chain, nums, block_size);
 	binaryInsert(main_chain, nums, block_size);
 	nums = main_chain;
@@ -55,57 +62,64 @@ void constructMainChain(int_vector &main_chain, int_vector &nums, size_t block_s
 	}
 }
 
+// void binaryInsert(int_vector &main_chain, int_vector &nums, size_t block_size)
+// {
+// 	size_t offset = block_size - 1;
+// 	iv_iterator it, main_begin, position, paired_element;
+// 	for (
+// 		it = nums.begin(), main_begin = main_chain.begin();
+// 		it + offset < nums.end();
+// 		it += block_size
+// 	)
+// 	{
+// 		main_begin = main_chain.begin(); // This gets corrupted if an insertion happens at the start during prior iteration
+// 		paired_element = main_begin + std::distance(nums.begin(), it);
+// 		position = lowerBound(main_begin, paired_element, *(it + offset), block_size);
+// 		main_chain.insert(position, it, it + block_size);
+// 	}
+// }
+
 void binaryInsert(int_vector &main_chain, int_vector &nums, size_t block_size)
 {
 	size_t offset = block_size - 1;
-	for (
-		iv_iterator it = nums.begin(), position, main_begin, paired_element;
-		it + offset < nums.end();
-		it += block_size
-	)
-	{
-		main_begin = main_chain.begin();
-		paired_element = main_begin + std::distance(nums.begin(), it);
-		position = lowerBound(main_begin, paired_element, *(it + offset), block_size);
-		main_chain.insert(position, it, it + block_size);
-	}
-}
+	size_t n, m;
+	iv_iterator position;
 
-// LOWER_BOUND
-template<class ForwardIt, class T = typename std::iterator_traits<ForwardIt>::value_type,
-         class Compare>
-ForwardIt lower_bound(ForwardIt first, ForwardIt last, const T& value, Compare comp)
-{
-    ForwardIt it;
-    typename std::iterator_traits<ForwardIt>::difference_type count, step;
-    count = std::distance(first, last);
- 
-    while (count > 0)
-    {
-        it = first;
-        step = count / 2;
-        std::advance(it, step);
- 
-        if (comp(*it, value))
-        {
-            first = ++it;
-            count -= step + 1;
-        }
-        else
-            count = step;
-    }
- 
-    return first;
+	for (n = 0, m = 0; n < nums.size(); n += block_size, m += 2 * block_size)
+	{
+		position = lowerBound(main_chain.begin(), main_chain.begin() + m, nums[n + offset], block_size);
+		main_chain.insert(position, nums.begin() + n, nums.begin() + (n + block_size));
+	}
 }
 
 /*
 	Iterates over the sorted vector (begin -> end), comparing value to each block-ending value within the vector.
-	Returns the index location of the start of the block at which (block-ending value >= value).
+	Returns an iterator to the location of the start of the block at which (block-ending value >= value).
 	Does so through a binary search approach (minimal comparisons).
 */
-size_t lowerBound(iv_iterator begin, iv_iterator end, const int &value, const size_t &block_size)
+iv_iterator lowerBound(iv_iterator begin, iv_iterator end, const int &value, const size_t &block_size)
 {
+	iv_iterator middle;
+	size_t offset, range_size, half_step;
 
+	offset = block_size - 1;
+	range_size = std::distance(begin, end) / block_size;
+
+	while (range_size > 0)
+	{
+		middle = begin + offset;
+		half_step = range_size / 2;
+		std::advance(middle, half_step * block_size);
+	
+		if (*middle < value)
+		{
+			begin = ++middle;
+			range_size -= half_step + 1;
+		}
+		else
+			range_size = half_step;
+	}
+	return begin;
 }
 
 // TESTERS

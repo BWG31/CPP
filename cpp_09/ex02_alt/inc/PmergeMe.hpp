@@ -16,6 +16,7 @@ void baseCase(int_vector &nums, size_t block_size);
 void sortSinglePairs(int_vector &nums, size_t block_size);
 void constructMainChain(int_vector &main_chain, int_vector &nums, size_t block_size);
 void binaryInsert(int_vector &main_chain, int_vector &nums, size_t block_size);
+iv_iterator lowerBound(iv_iterator begin, iv_iterator end, const int &value, const size_t &block_size);
 
 // TESTERS
 void printVector(int_vector &vec);
