@@ -6,18 +6,28 @@ void PmergeMe(int_vector &nums, size_t block_size)
 	int_vector	leftovers;
 
 	if (nums.size() / 2 <= block_size)
-		return baseCase(nums, block_size);
+		return (baseCase(nums, block_size));
+	stashLeftovers(nums, leftovers, block_size);
+	sortSinglePairs(nums, block_size);
+	PmergeMe(nums, block_size * 2);
+	restoreLeftovers(nums, leftovers);
+	constructMainChain(main_chain, nums, block_size);
+	binaryInsert(main_chain, nums, block_size);
+	nums = main_chain;
+}
+
+void stashLeftovers(int_vector &nums, int_vector &leftovers, size_t block_size)
+{
 	if (nums.size() % (block_size * 2))
 	{
 		leftovers.insert(leftovers.end(), nums.end() - block_size, nums.end());
 		nums.erase(nums.end() - block_size, nums.end());
 	}
-	sortSinglePairs(nums, block_size);
-	PmergeMe(nums, block_size * 2);
+}
+
+void restoreLeftovers(int_vector &nums, int_vector &leftovers)
+{
 	nums.insert(nums.end(), leftovers.begin(), leftovers.end());
-	constructMainChain(main_chain, nums, block_size);
-	binaryInsert(main_chain, nums, block_size);
-	nums = main_chain;
 }
 
 void baseCase(int_vector &nums, size_t block_size)
@@ -62,23 +72,6 @@ void constructMainChain(int_vector &main_chain, int_vector &nums, size_t block_s
 	}
 }
 
-// void binaryInsert(int_vector &main_chain, int_vector &nums, size_t block_size)
-// {
-// 	size_t offset = block_size - 1;
-// 	iv_iterator it, main_begin, position, paired_element;
-// 	for (
-// 		it = nums.begin(), main_begin = main_chain.begin();
-// 		it + offset < nums.end();
-// 		it += block_size
-// 	)
-// 	{
-// 		main_begin = main_chain.begin(); // This gets corrupted if an insertion happens at the start during prior iteration
-// 		paired_element = main_begin + std::distance(nums.begin(), it);
-// 		position = lowerBound(main_begin, paired_element, *(it + offset), block_size);
-// 		main_chain.insert(position, it, it + block_size);
-// 	}
-// }
-
 void binaryInsert(int_vector &main_chain, int_vector &nums, size_t block_size)
 {
 	size_t offset = block_size - 1;
@@ -91,6 +84,28 @@ void binaryInsert(int_vector &main_chain, int_vector &nums, size_t block_size)
 		main_chain.insert(position, nums.begin() + n, nums.begin() + (n + block_size));
 	}
 }
+
+size_t jacobsthal(size_t n)
+{
+	return (round((pow(2, n) + pow(-1, n)) / 3));
+}
+
+/*
+	DRAWIO SKETCH
+	
+	int inserted = (main.size() - nums.size()) / block_size = 1
+
+	to_insert = jacob = 2
+
+	n = (to_insert - 1) * block_size = 1
+
+	while (to_insert)
+	pos = lowerBound(main.begin(), main.begin() + n + inserted + 1, nums[n + offset], block_size)
+	main.insert(pos, nums.begin() + n, nums.begin() + n + block_size)
+	n -= block_size;
+	to_insert--;
+	inserted += block_size;
+*/
 
 /*
 	Iterates over the sorted vector (begin -> end), comparing value to each block-ending value within the vector.
