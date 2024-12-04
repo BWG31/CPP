@@ -15,7 +15,7 @@ void PmergeMe(int_vector &nums, size_t block_size)
 	binaryInsertRec(main_chain, nums, block_size, 2);
 	nums = main_chain;
 	std::cout << " || End of func ||\n";
-	printVector(nums);
+	printVector(nums, "nums");
 }
 
 void stashLeftovers(int_vector &nums, int_vector &leftovers, size_t block_size)
@@ -98,14 +98,14 @@ static size_t nextInSequence(size_t step)
 	return (round((pow(2, step) + pow(-1, step)) / 3));
 }
 
-size_t getNumsToInsert(size_t step, const int_vector &nums)
+size_t getNumsToInsert(size_t step, const int_vector &nums, size_t block_size)
 {
 	if (!nums.size())
 		return 0;
 	if (step <= 1)
 		return step;
 	size_t next = nextInSequence(step);
-		return ((next <= nums.size()) ? next : nums.size());
+		return ((next <= nums.size() / block_size) ? next : nums.size() / block_size);
 }
 
 
@@ -117,30 +117,43 @@ size_t getNumsToInsert(size_t step, const int_vector &nums)
 void binaryInsertRec(int_vector &main_chain, int_vector &nums, size_t block_size, size_t step)
 {
 	std::cout << "\n\n[[[[ NEW FUNCTION ]]]] ------------------------------------------\n\n";
+	printVector(main_chain, "main_chain");
+	printVector(nums, "nums");
+	std::cout << "block_size = " << block_size << "\t\tstep = " << step << std::endl;
+	std::cout << "-------------------\n";
 	if (nums.size() == 0)
 		return ;
 	size_t	offset = block_size - 1;
-	size_t	inserted = main_chain.size() - nums.size();
-	size_t	to_insert = getNumsToInsert(step, nums);
+	size_t	inserted = (main_chain.size() < nums.size()) ? 0 : main_chain.size() - nums.size();
+	size_t	to_insert = getNumsToInsert(step, nums, block_size);
 	size_t	n = to_insert * block_size - 1;
 
 	// NOTACCOUNTING FOR LEFTOVERS (INBALANCE BETWEEN .size())
-	for (iv_iterator position, value, paired_value; to_insert != 0; --to_insert)
+	for (iv_iterator position, value, comp_end; to_insert > 0; --to_insert)
 	{
 		value = nums.begin() + n;
-		std::cout << "\n\t\t{{ NEW ITERATION }}\n\nn: " << n << "\tinserted: " << inserted << std::endl;
-		paired_value = main_chain.begin() + n + inserted + block_size;
-		std::cout << "___\nSearching for [" << *value << "] up to [" << *paired_value << "] in\n";
-		printVector(main_chain);
+		std::cout << "\n\t\t{{ NEW ITERATION }}\n\nn: " << n << "\tinserted: " << inserted << "\tto_insert: " << to_insert << std::endl;
+		if (std::distance(value, nums.end() - 1) == 0)
+			comp_end = main_chain.end();
+		else
+			comp_end = main_chain.begin() + n + inserted + offset;
+		std::cout << "___\nSearching for [" << *value << "] with end after [" << *(comp_end - 1) << "] in\n";
+		printVector(main_chain, "main_chain");
 		std::cout << "___" << std::endl;
-		position = lowerBound(main_chain.begin(), paired_value, *value, block_size);
+		position = lowerBound(main_chain.begin(), comp_end, *value, block_size);
 		std::cout << "Inserting: " << *value << " before " << *position << '\n';
 		main_chain.insert(position, value - offset, value + 1);
 		// nums.erase(value - offset, value + 1);
 		n -= block_size;
 		inserted += block_size;
 	}
-	nums.erase(nums.begin(), nums.begin() + (getNumsToInsert(step, nums) * block_size));
+	std::cout << "Erasing nums\n";
+	printVector(nums, "nums");
+	to_insert = getNumsToInsert(step, nums, block_size);
+	nums.erase(nums.begin(), nums.begin() + (to_insert * block_size));
+	printVector(nums, "nums");
+	std::cout << "nums erased\n";
+	printVector(main_chain, "main_chain");
 	binaryInsertRec(main_chain, nums, block_size, step + 1);
 }
 
@@ -178,9 +191,9 @@ iv_iterator lowerBound(iv_iterator begin, iv_iterator end, const int &value, con
 }
 
 // TESTERS
-void printVector(int_vector &vec)
+void printVector(int_vector &vec, const std::string &str)
 {
-	std::cout << "<< PRINT VECTOR >>\n";
+	std::cout << "<< "<< str << " >>\n";
 	for (iv_iterator it = vec.begin(); it != vec.end(); ++it)
 		std::cout << " | " << *it;
 	std::cout << " |" << std::endl;
