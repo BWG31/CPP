@@ -85,27 +85,46 @@ void binaryInsert(int_vector &main_chain, int_vector &nums, size_t block_size)
 	}
 }
 
-size_t jacobsthal(size_t n)
+/*
+	Returns the number of elements to insert based on the given step (starting at 1)
+	The mathematical sequence is: 0, 2, 2, 6, 10, 22, 42, etc...
+*/
+static size_t nextInSequence(size_t step)
 {
-	return (round((pow(2, n) + pow(-1, n)) / 3));
+	return (round((pow(2, step) + pow(-1, step)) / 3));
 }
 
-/*
-	DRAWIO SKETCH
-	
-	int inserted = (main.size() - nums.size()) / block_size = 1
+size_t getNumsToInsert(size_t step, const int_vector &nums)
+{
+	if (!nums.size())
+		return 0;
+	if (step <= 1)
+		return step;
+	size_t next = nextInSequence(step);
+		return ((next <= nums.size()) ? next : nums.size());
+}
 
-	to_insert = jacob = 2
+// void binaryInsertRec(int_vector &main_chain, int_vector &nums, size_t block_size, size_t step)
+// {
+// 	if (nums.size() == 0)
+// 		return ;
+// 	size_t	offset = block_size - 1;
+// 	size_t	inserted = (main_chain.size() - nums.size()) / block_size;
+// 	size_t	to_insert = getNumsToInsert(step);
+// 	size_t	n = (to_insert - 1) * block_size;
 
-	n = (to_insert - 1) * block_size = 1
-
-	while (to_insert)
-	pos = lowerBound(main.begin(), main.begin() + n + inserted + 1, nums[n + offset], block_size)
-	main.insert(pos, nums.begin() + n, nums.begin() + n + block_size)
-	n -= block_size;
-	to_insert--;
-	inserted += block_size;
-*/
+// 	for (iv_iterator position, value, paired_value; to_insert != 0; --to_insert)
+// 	{
+// 		value = nums.begin() + n + offset;
+// 		paired_value = main_chain.begin() + n + inserted + 1;
+// 		position = lowerBound(main_chain.begin(), paired_value, *value, block_size);
+// 		main_chain.insert(position, value - offset, value + 1);
+// 		nums.erase(value - offset, value + 1);
+// 		n -= block_size;
+// 		inserted += block_size;
+// 	}
+// 	binaryInsertRec(main_chain, nums, block_size, step + 1);
+// }
 
 /*
 	Iterates over the sorted vector (begin -> end), comparing value to each block-ending value within the vector.

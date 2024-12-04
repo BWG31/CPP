@@ -20,5 +20,8 @@ int main(int argc, char **argv)
 	std::cout << "After:\t";
 	print_vector(input);
 
+	for (size_t i = 1; i < 10; ++i)
+		std::cout << getNumsToInsert(i, input) << std::endl;
+
 	return 0;
 }
