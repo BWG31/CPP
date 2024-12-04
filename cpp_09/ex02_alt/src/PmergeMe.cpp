@@ -12,8 +12,10 @@ void PmergeMe(int_vector &nums, size_t block_size)
 	PmergeMe(nums, block_size * 2);
 	restoreLeftovers(nums, leftovers);
 	constructMainChain(main_chain, nums, block_size);
-	binaryInsert(main_chain, nums, block_size);
+	binaryInsertRec(main_chain, nums, block_size, 1);
 	nums = main_chain;
+	std::cout << " || End of func ||\n";
+	printVector(nums);
 }
 
 void stashLeftovers(int_vector &nums, int_vector &leftovers, size_t block_size)
@@ -104,27 +106,32 @@ size_t getNumsToInsert(size_t step, const int_vector &nums)
 		return ((next <= nums.size()) ? next : nums.size());
 }
 
-// void binaryInsertRec(int_vector &main_chain, int_vector &nums, size_t block_size, size_t step)
-// {
-// 	if (nums.size() == 0)
-// 		return ;
-// 	size_t	offset = block_size - 1;
-// 	size_t	inserted = (main_chain.size() - nums.size()) / block_size;
-// 	size_t	to_insert = getNumsToInsert(step);
-// 	size_t	n = (to_insert - 1) * block_size;
+void binaryInsertRec(int_vector &main_chain, int_vector &nums, size_t block_size, size_t step)
+{
+	if (nums.size() == 0)
+		return ;
+	size_t	offset = block_size - 1;
+	size_t	inserted = (main_chain.size() - nums.size()) / block_size;
+	size_t	to_insert = getNumsToInsert(step, nums);
+	size_t	n = (to_insert - 1) * block_size;
 
-// 	for (iv_iterator position, value, paired_value; to_insert != 0; --to_insert)
-// 	{
-// 		value = nums.begin() + n + offset;
-// 		paired_value = main_chain.begin() + n + inserted + 1;
-// 		position = lowerBound(main_chain.begin(), paired_value, *value, block_size);
-// 		main_chain.insert(position, value - offset, value + 1);
-// 		nums.erase(value - offset, value + 1);
-// 		n -= block_size;
-// 		inserted += block_size;
-// 	}
-// 	binaryInsertRec(main_chain, nums, block_size, step + 1);
-// }
+	// NOTACCOUNTING FOR LEFTOVERS (INBALANCE BETWEEN .size())
+	for (iv_iterator position, value, paired_value; to_insert != 0; --to_insert)
+	{
+		value = nums.begin() + n + offset;
+		paired_value = main_chain.begin() + n + inserted + 1;
+		std::cout << "___\nSearching for [" << *value << "] up to [" << *paired_value << "] in\n";
+		printVector(main_chain);
+		std::cout << "\n___" << std::endl;
+		position = lowerBound(main_chain.begin(), paired_value, *value, block_size);
+		std::cout << "Inserting: " << *value << " before " << *position << '\n';
+		main_chain.insert(position, value - offset, value + 1);
+		nums.erase(value - offset, value + 1);
+		n -= block_size;
+		inserted += block_size;
+	}
+	binaryInsertRec(main_chain, nums, block_size, step + 1);
+}
 
 /*
 	Iterates over the sorted vector (begin -> end), comparing value to each block-ending value within the vector.

@@ -25,4 +25,6 @@ size_t getNumsToInsert(size_t step, const int_vector &nums);
 // TESTERS
 void printVector(int_vector &vec);
 
+void binaryInsertRec(int_vector &main_chain, int_vector &nums, size_t block_size, size_t step);
+
 #endif
