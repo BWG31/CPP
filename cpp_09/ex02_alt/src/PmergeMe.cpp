@@ -136,7 +136,7 @@ void binaryInsertRec(int_vector &main_chain, int_vector &nums, size_t block_size
 		if (std::distance(value, nums.end() - 1) == 0)
 			comp_end = main_chain.end();
 		else
-			comp_end = main_chain.begin() + n + inserted + offset;
+			comp_end = main_chain.begin() + n + inserted + block_size;
 		std::cout << "___\nSearching for [" << *value << "] with end after [" << *(comp_end - 1) << "] in\n";
 		printVector(main_chain, "main_chain");
 		std::cout << "___" << std::endl;
