@@ -28,29 +28,3 @@ void printVector(int_vector &vec, const std::string &str);
 void binaryInsertRec(int_vector &main_chain, int_vector &nums, size_t block_size, size_t step);
 
 #endif
-
-/*
-
-
-
-	block_size =	2
-	offset =		1
-	inserted =		0	= (4 - 4) / 2
-	to_insert =		1
-	n	=			0	= (1 - 1) * 2
-
-	FOR (t_insert != 0; --to_insert)
-
-	*position	=	
-	*value		=	4
-	paired_value=	7
-
-
-
-
-
-	block_size = 2
-	toinsert = 1
-	idx = (to_insert * block_size) - 1 = 1 
-
-*/

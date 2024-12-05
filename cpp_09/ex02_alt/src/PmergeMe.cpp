@@ -5,8 +5,11 @@ void PmergeMe(int_vector &nums, size_t block_size)
 	int_vector	main_chain;
 	int_vector	leftovers;
 
-	if (nums.size() / 2 <= block_size)
-		return (baseCase(nums, block_size));
+	std::cout << "PMERGEME - block_size = " << block_size << std::endl;
+	printVector(nums, "nums @ PmergeMe start");
+	if (nums.size() / block_size < 2)
+		return ;
+		// return (baseCase(nums, block_size));
 	stashLeftovers(nums, leftovers, block_size);
 	sortSinglePairs(nums, block_size);
 	PmergeMe(nums, block_size * 2);
@@ -14,8 +17,8 @@ void PmergeMe(int_vector &nums, size_t block_size)
 	constructMainChain(main_chain, nums, block_size);
 	binaryInsertRec(main_chain, nums, block_size, 2);
 	nums = main_chain;
-	std::cout << " || End of func ||\n";
-	printVector(nums, "nums");
+	// std::cout << " || End of func ||\n";
+	// printVector(nums, "nums");
 }
 
 void stashLeftovers(int_vector &nums, int_vector &leftovers, size_t block_size)
@@ -67,9 +70,9 @@ void constructMainChain(int_vector &main_chain, int_vector &nums, size_t block_s
 		it += block_size
 	)
 	{
-		main_chain.insert(main_chain.end(), it - offset, it + 1); //Invalidates main_chain iterators (if realloc required)
+		main_chain.insert(main_chain.end(), it - offset, it + 1);
 		size_t tmp = it - nums.begin();
-		nums.erase(it - offset, it + 1); // Invalidates iterators
+		nums.erase(it - offset, it + 1);
 		it = nums.begin() + tmp;
 	}
 	main_chain.insert(main_chain.begin(), nums.begin(), nums.begin() + block_size);
@@ -116,13 +119,13 @@ size_t getNumsToInsert(size_t step, const int_vector &nums, size_t block_size)
 
 void binaryInsertRec(int_vector &main_chain, int_vector &nums, size_t block_size, size_t step)
 {
+	if (nums.size() == 0)
+		return ;
 	std::cout << "\n\n[[[[ NEW FUNCTION ]]]] ------------------------------------------\n\n";
 	printVector(main_chain, "main_chain");
 	printVector(nums, "nums");
 	std::cout << "block_size = " << block_size << "\t\tstep = " << step << std::endl;
 	std::cout << "-------------------\n";
-	if (nums.size() == 0)
-		return ;
 	size_t	offset = block_size - 1;
 	size_t	inserted = (main_chain.size() < nums.size()) ? 0 : main_chain.size() - nums.size();
 	size_t	to_insert = getNumsToInsert(step, nums, block_size);
@@ -143,7 +146,7 @@ void binaryInsertRec(int_vector &main_chain, int_vector &nums, size_t block_size
 		position = lowerBound(main_chain.begin(), comp_end, *value, block_size);
 		std::cout << "Inserting: " << *value << " before " << *position << '\n';
 		main_chain.insert(position, value - offset, value + 1);
-		// nums.erase(value - offset, value + 1);
+		nums.erase(value - offset, value + 1);
 		n -= block_size;
 		inserted += block_size;
 	}

@@ -18,7 +18,14 @@ int main(int argc, char **argv)
 	PmergeMe(input, 1);
 
 	std::cout << "After:\t";
+	int_vector input_copy(input);
+	std::sort(input_copy.begin(), input_copy.end());
+	if (input != input_copy)
+		std::cout << "\033[31m";
+	else
+		std::cout << "\033[32m";
 	print_vector(input);
+	std::cout << "\033[0m";
 
 	return 0;
 }
