@@ -2,44 +2,29 @@
 # define PMERGEME_HPP
 
 # include <vector>
-# include <utility>
+# include <algorithm>
+# include <cmath>
 # include <iostream>
 # include <iomanip>
 
 typedef std::vector<int> int_vector;
 typedef int_vector::iterator iv_iterator;
-typedef std::vector<std::pair<int, int> > pair_vector;
-typedef pair_vector::iterator pv_iterator;
 
 class PmergeMe
 {
 	public:
-		// Constructors | Destructor
 		PmergeMe(const int_vector &input);
 		~PmergeMe();
-
-		void sort();
-
-		// getters
-		const int_vector &getValues() const;
-		const bool &getLeftover() const;
-		const int &getLeftoverValue() const;
+	
+		const int_vector	&getNums() const;
+		const size_t		&getComparisons() const;
 
 	private:
-		int_vector	values;
-		pair_vector paired_values;
-		bool		leftover;
-		int			leftover_value;
+		int_vector	_nums;
+		size_t		_comparisons;
 
-		void makePairs();
-		void mergeInsertPairs(pv_iterator it, pv_iterator end);
-		void baseCase(pv_iterator it, size_t size);
-
-		// Templated methods
-		void sortSinglePairs(pv_iterator it, pv_iterator end);
-		void sortSinglePairs(iv_iterator it, iv_iterator end);
-
-		// Unused coplien elements
+		const static size_t	_firstInsertionStep = 2;
+	// Unused coplien elements
 		PmergeMe();
 		PmergeMe(const PmergeMe &other);
 		PmergeMe &operator=(const PmergeMe &rhs);
