@@ -12,7 +12,7 @@ void PmergeMe(int_vector &nums, size_t block_size)
 	PmergeMe(nums, block_size * 2);
 	restoreLeftovers(nums, leftovers);
 	constructMainChain(main_chain, nums, block_size);
-	binaryInsert(main_chain, nums, block_size, 2);
+	binaryInsert(main_chain, nums, block_size, FIRST_INSERTION_STEP);
 	nums = main_chain;
 }
 
@@ -82,10 +82,6 @@ size_t getNumsToInsert(size_t step, const int_vector &nums, size_t block_size)
 		return ((next <= nums.size() / block_size) ? next : nums.size() / block_size);
 }
 
-
-//	===========================================
-// INSERTION BLOCK
-
 static size_t calculateInsertionBlockSize(const int_vector &main_chain ,size_t step, size_t block_size)
 {
 	size_t	size = (pow(2, step) - 1) * block_size;
@@ -111,24 +107,22 @@ void binaryInsert(int_vector &main_chain, int_vector &nums, size_t block_size, s
 }
 
 /*
-	Iterates over the sorted vector (begin -> end), comparing value to each block-ending value within the vector.
-	Returns an iterator to the location of the start of the block at which (block-ending value >= value).
-	Does so through a binary search approach (minimal comparisons).
+	Custom implementation of std::lower_bound to handle block_size (stride size).
+	A similar output could be achieved with creating a custom iterator.
 */
 iv_iterator lowerBound(iv_iterator begin, iv_iterator end, const int &value, const size_t &block_size)
 {
 	iv_iterator middle;
-	size_t offset, range_size, half_step;
+	size_t range_size, half_step;
 
-	offset = block_size - 1;
 	range_size = std::distance(begin, end) / block_size;
 
 	while (range_size > 0)
 	{
-		middle = begin + offset;
+		middle = begin + block_size - 1;
 		half_step = range_size / 2;
 		std::advance(middle, half_step * block_size);
-	
+
 		COMPS++;
 		if (*middle < value)
 		{

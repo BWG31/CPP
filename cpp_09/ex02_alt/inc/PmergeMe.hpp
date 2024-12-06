@@ -8,6 +8,8 @@
 # include <algorithm>
 # include <cmath>
 
+# define FIRST_INSERTION_STEP (2)
+
 extern int COMPS;
 
 typedef std::vector<int> int_vector;

@@ -21,14 +21,21 @@ int main(int argc, char **argv)
 	
 	PmergeMe(input, 1);
 
+	// VALIDATE SORT
+
+	int status = 0;
+
 	std::cout << "After:\t";
 	std::sort(input_copy.begin(), input_copy.end());
 	if (input != input_copy)
+	{
 		std::cout << "\033[31m";
+		status = 1;
+	}
 	else
 		std::cout << "\033[32m";
 	print_vector(input);
 	std::cout << "\033[0m";
 	std::cout << "COMPS: " << COMPS << std::endl;
-	return 0;
+	return status;
 }
