@@ -15,12 +15,11 @@ typedef int_vector::iterator iv_iterator;
 
 void PmergeMe(int_vector &nums, size_t block_size);
 
-void baseCase(int_vector &nums, size_t block_size);
-bool stashLeftovers(int_vector &nums, int_vector &leftovers, size_t block_size);
+void stashLeftovers(int_vector &nums, int_vector &leftovers, size_t block_size);
 void restoreLeftovers(int_vector &nums, int_vector &leftovers);
 void sortSinglePairs(int_vector &nums, size_t block_size);
 void constructMainChain(int_vector &main_chain, int_vector &nums, size_t block_size);
-void binaryInsert(int_vector &main_chain, int_vector &nums, size_t block_size, size_t step, bool leftovers);
+void binaryInsert(int_vector &main_chain, int_vector &nums, size_t block_size, size_t step);
 iv_iterator lowerBound(iv_iterator begin, iv_iterator end, const int &value, const size_t &block_size);
 size_t getNumsToInsert(size_t step, const int_vector &nums, size_t block_size);
 

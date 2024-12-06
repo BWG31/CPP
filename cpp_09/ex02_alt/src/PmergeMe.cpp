@@ -7,24 +7,22 @@ void PmergeMe(int_vector &nums, size_t block_size)
 
 	if (nums.size() / block_size < 2)
 		return ;
-	bool leftovers_exist = stashLeftovers(nums, leftovers, block_size);
+	stashLeftovers(nums, leftovers, block_size);
 	sortSinglePairs(nums, block_size);
 	PmergeMe(nums, block_size * 2);
 	restoreLeftovers(nums, leftovers);
 	constructMainChain(main_chain, nums, block_size);
-	binaryInsert(main_chain, nums, block_size, 2, leftovers_exist);
+	binaryInsert(main_chain, nums, block_size, 2);
 	nums = main_chain;
 }
 
-bool stashLeftovers(int_vector &nums, int_vector &leftovers, size_t block_size)
+void stashLeftovers(int_vector &nums, int_vector &leftovers, size_t block_size)
 {
 	if (nums.size() % (block_size * 2))
 	{
 		leftovers.insert(leftovers.end(), nums.end() - block_size, nums.end());
 		nums.erase(nums.end() - block_size, nums.end());
-		return true;
 	}
-	return false;
 }
 
 void restoreLeftovers(int_vector &nums, int_vector &leftovers)
@@ -88,29 +86,28 @@ size_t getNumsToInsert(size_t step, const int_vector &nums, size_t block_size)
 //	===========================================
 // INSERTION BLOCK
 
-void binaryInsert(int_vector &main_chain, int_vector &nums, size_t block_size, size_t step, bool leftovers)
+static size_t calculateInsertionBlockSize(const int_vector &main_chain ,size_t step, size_t block_size)
+{
+	size_t	size = (pow(2, step) - 1) * block_size;
+	return ((size <= main_chain.size()) ? size : main_chain.size());
+}
+
+void binaryInsert(int_vector &main_chain, int_vector &nums, size_t block_size, size_t step)
 {
 	if (nums.size() == 0)
 		return ;
-	size_t	offset = block_size - 1;
-	size_t	inserted = (main_chain.size() < nums.size()) ? 0 : main_chain.size() - nums.size();
 	size_t	to_insert = getNumsToInsert(step, nums, block_size);
-	size_t	n = to_insert * block_size - 1;
+	size_t	insertion_block = calculateInsertionBlockSize(main_chain, step, block_size);
 
-	for (iv_iterator position, value, comp_end; to_insert > 0; --to_insert)
+	for (iv_iterator position, value; to_insert > 0; --to_insert)
 	{
-		value = nums.begin() + n;
-		comp_end = main_chain.begin() + n + inserted;
-		if (leftovers)
-			comp_end += block_size;
-		position = lowerBound(main_chain.begin(), comp_end, *value, block_size);
-		main_chain.insert(position, value - offset, value + 1);
-		n -= block_size;
-		inserted += block_size;
+		value = nums.begin() + (to_insert * block_size) - 1;
+		position = lowerBound(main_chain.begin(), main_chain.begin() + insertion_block, *value, block_size);
+		main_chain.insert(position, value - (block_size -1), value + 1);
 	}
 	to_insert = getNumsToInsert(step, nums, block_size);
 	nums.erase(nums.begin(), nums.begin() + (to_insert * block_size));
-	binaryInsert(main_chain, nums, block_size, step + 1, leftovers);
+	binaryInsert(main_chain, nums, block_size, step + 1);
 }
 
 /*
