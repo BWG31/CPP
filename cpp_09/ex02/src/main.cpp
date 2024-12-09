@@ -3,7 +3,6 @@
 
 // main helpers
 bool validate_input(int_vector &input, int argc, char **argv);
-void print_vector(int_vector &input);
 
 int main(int argc, char **argv)
 {
@@ -14,8 +13,11 @@ int main(int argc, char **argv)
 	PmergeMe numbers(input);
 
 	std::cout << "Before:\t" << numbers;
-
+	numbers.mergeInsertionSort();
 	std::cout << "After:\t" << numbers;
-
+	std::cout << "Comparisons made: " << numbers.getComparisons() << std::endl;
+	std::sort(input.begin(), input.end());
+	if (numbers.getNums() != input)
+		return 1;
 	return 0;
 }
