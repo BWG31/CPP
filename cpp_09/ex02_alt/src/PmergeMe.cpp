@@ -31,6 +31,12 @@ bool validate_input(int_vector &input, int argc, char **argv)
 	return true;
 }
 
+void print_timings(double vec_time, size_t vec_size, double deq_time, size_t deq_size)
+{
+	std::cout << "Time to process a range of " << vec_size << " elements with std::vector : " << vec_time << " ms" << std::endl;
+	std::cout << "Time to process a range of " << deq_size << " elements with std::deque : " << deq_time << "ms" << std::endl;
+}
+
 // ==== ALGORITHM HELPERS ====
 
 /*

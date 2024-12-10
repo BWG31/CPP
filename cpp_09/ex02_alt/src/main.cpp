@@ -20,12 +20,16 @@ int main(int argc, char **argv)
 	// Display before state
 	std::cout << "Before:\t";
 	print_container(input_vector);
+
+	double vec_time, deq_time;
 	
-	PmergeMe(input_vector);
-	PmergeMe(input_deque);
+	vec_time = timed_execution(input_vector);
+	deq_time = timed_execution(input_deque);
 
 	std::cout << "After:\t";
 	print_container(input_vector);
+
+	print_timings(vec_time, input_vector.size(), deq_time, input_deque.size());
 
 	return (checkSorted(input_vector, vector_copy, "vector") | \
 			checkSorted(input_deque, deque_copy, "deque"));

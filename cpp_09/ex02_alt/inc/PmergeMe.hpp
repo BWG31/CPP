@@ -8,6 +8,7 @@
 # include <iomanip>
 # include <algorithm>
 # include <cmath>
+# include <ctime>
 
 # define RED "\033[31m"
 # define RST "\033[0m"
@@ -19,10 +20,12 @@ typedef std::deque<int> int_deq;
 
 // ==== PmergeMe.cpp ====
 bool	validate_input(int_vector &input, int argc, char **argv);
+void 	print_timings(double vec_time, size_t vec_size, double deq_time, size_t deq_size);
 size_t	nextInSequence(const size_t &step);
 
 // ==== TEMPLATE FUNCTION PROTOTYPES | MAIN HELPERS ====
 template <typename T> void print_container(T &input);
+template <typename T> double timed_execution(T &input);
 template <typename T> int checkSorted(T &sorted, T &copy, const std::string &type);
 
 // ==== TEMPLATE FUNCTION PROTOTYPES | SORTING ALGORITHM ====
@@ -189,5 +192,17 @@ int checkSorted(T &sorted, T &copy, const std::string &type)
 	}
 	return 0;
 };
+
+template <typename T>
+double timed_execution(T &input)
+{
+	std::clock_t start, end;
+
+	start = std::clock();
+	PmergeMe(input);
+	end = std::clock();
+
+	return (1000.0 * (end - start) / CLOCKS_PER_SEC);
+}
 
 #endif
