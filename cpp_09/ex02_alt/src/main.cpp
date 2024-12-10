@@ -2,37 +2,31 @@
 
 int main(int argc, char **argv)
 {
-	int_vector input;
-	if (!validate_input(input, argc, argv))
+	int_vector	input_vector, vector_copy;
+	int_deq		input_deque, deque_copy;
+
+	if (!validate_input(input_vector, argc, argv))
 		return 1;
+	print_container(input_vector);
 
-	int_vector input_copy(input);
-	int_deq input_deque(input.size());
+	// Copy input_vector to input_deque
+	input_deque.resize(input_vector.size());
+	std::copy(input_vector.begin(), input_vector.end(), input_deque.begin());
 
+	// Make copies for later sorting validation with checkSorted()
+	vector_copy = input_vector;
+	deque_copy = input_deque;
+
+	// Display before state
 	std::cout << "Before:\t";
-	print_container(input);
+	print_container(input_vector);
 	
-
-	std::copy(input.begin(), input.end(), input_deque.begin());
-	print_container(input_deque);
-	
+	PmergeMe(input_vector);
 	PmergeMe(input_deque);
-	PmergeMe(input);
-	// VALIDATE SORT
-
-	int status = 0;
 
 	std::cout << "After:\t";
-	std::sort(input_copy.begin(), input_copy.end());
-	if (input != input_copy)
-	{
-		std::cout << "\033[31m";
-		status = 1;
-	}
-	else
-		std::cout << "\033[32m";
-	print_container(input);
-	print_container(input_deque);
-	std::cout << "\033[0m";
-	return status;
+	print_container(input_vector);
+
+	return (checkSorted(input_vector, vector_copy, "vector") | \
+			checkSorted(input_deque, deque_copy, "deque"));
 }

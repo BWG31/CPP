@@ -3,6 +3,8 @@
 #include <sstream>
 #include <string>
 
+// ==== INPUT VALIDATION ====
+
 static void parse_input(int_vector &input, int argc, char **argv)
 {
 	if (argc < 2 || argc > 10001)
@@ -28,6 +30,8 @@ bool validate_input(int_vector &input, int argc, char **argv)
 	}
 	return true;
 }
+
+// ==== ALGORITHM HELPERS ====
 
 /*
 	Returns the number of elements to insert based on the given step (starting at 1)

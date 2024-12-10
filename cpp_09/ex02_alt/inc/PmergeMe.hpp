@@ -9,6 +9,9 @@
 # include <algorithm>
 # include <cmath>
 
+# define RED "\033[31m"
+# define RST "\033[0m"
+
 # define FIRST_INSERTION_STEP (2)
 
 typedef std::vector<int> int_vector;
@@ -18,7 +21,11 @@ typedef std::deque<int> int_deq;
 bool	validate_input(int_vector &input, int argc, char **argv);
 size_t	nextInSequence(const size_t &step);
 
-// ==== TEMPLATE FUNCTION PROTOTYPES ====
+// ==== TEMPLATE FUNCTION PROTOTYPES | MAIN HELPERS ====
+template <typename T> void print_container(T &input);
+template <typename T> int checkSorted(T &sorted, T &copy, const std::string &type);
+
+// ==== TEMPLATE FUNCTION PROTOTYPES | SORTING ALGORITHM ====
 
 template <typename T> void PmergeMe(T &nums, size_t block_size = 1);
 template <typename T> void sortSinglePairs(T &nums, size_t block_size);
@@ -30,9 +37,7 @@ template <typename T> size_t calculateInsertionBlockSize(const T &main_chain, co
 template <typename T> size_t getNumsToInsert(const size_t &step, const T &nums, const size_t &block_size);
 template <typename T> T lowerBound(T begin, T end, const int &value, const size_t &block_size);
 
-template <typename T> void print_container(T &input);
-
-// ==== TEMPLATE FUNCTION DEFINITIONS ====
+// ==== TEMPLATE FUNCTION DEFINITIONS | SORTING ALGORITHM ====
 
 template <typename T>
 void PmergeMe(T &nums, size_t block_size)
@@ -52,6 +57,16 @@ void PmergeMe(T &nums, size_t block_size)
 };
 
 template <typename T>
+void stashLeftovers(T &nums, T &leftovers, const size_t &block_size)
+{
+	if (nums.size() % (block_size * 2))
+	{
+		leftovers.insert(leftovers.end(), nums.end() - block_size, nums.end());
+		nums.erase(nums.end() - block_size, nums.end());
+	}
+};
+
+template <typename T>
 void sortSinglePairs(T &nums, size_t block_size)
 {
 	size_t offset = block_size - 1;
@@ -64,6 +79,12 @@ void sortSinglePairs(T &nums, size_t block_size)
 		if (*it > *(it + block_size))
 			std::swap_ranges(it - offset, it + 1, it + block_size - offset);
 	}
+};
+
+template <typename T>
+void restoreLeftovers(T &nums, T &leftovers)
+{
+	nums.insert(nums.end(), leftovers.begin(), leftovers.end());
 };
 
 template <typename T>
@@ -102,22 +123,6 @@ void binaryInsert(T &main_chain, T &nums, size_t block_size, size_t step)
 	to_insert = getNumsToInsert(step, nums, block_size);
 	nums.erase(nums.begin(), nums.begin() + (to_insert * block_size));
 	binaryInsert(main_chain, nums, block_size, step + 1);
-};
-
-template <typename T>
-void stashLeftovers(T &nums, T &leftovers, const size_t &block_size)
-{
-	if (nums.size() % (block_size * 2))
-	{
-		leftovers.insert(leftovers.end(), nums.end() - block_size, nums.end());
-		nums.erase(nums.end() - block_size, nums.end());
-	}
-};
-
-template <typename T>
-void restoreLeftovers(T &nums, T &leftovers)
-{
-	nums.insert(nums.end(), leftovers.begin(), leftovers.end());
 };
 
 template <typename T>
@@ -161,12 +166,28 @@ T lowerBound(T begin, T end, const int &value, const size_t &block_size)
 	return begin;
 };
 
+// ==== TEMPLATE FUNCTION DEFINITIONS | MAIN HELPERS ====
+
 template <typename T>
 void print_container(T &input)
 {
 	for (typename T::iterator it = input.begin(); it != input.end(); ++it)
 		std::cout << ' ' << *it;
 	std::cout << std::endl;
+};
+
+template <typename T>
+int checkSorted(T &sorted, T &copy, const std::string &type)
+{
+	std::sort(copy.begin(), copy.end());
+	if (sorted != copy)
+	{
+		std::cerr << RED << type << " not sorted\n";
+		print_container(sorted);
+		std::cerr << RST << std::endl;
+		return 1;
+	}
+	return 0;
 };
 
 #endif
