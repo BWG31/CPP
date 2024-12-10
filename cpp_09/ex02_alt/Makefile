@@ -1,6 +1,6 @@
 NAME	=	PmergeMe
 
-SRC		=	main main_helpers PmergeMe PmergeMe_vector PmergeMe_deque
+SRC		=	main PmergeMe
 
 INC_DIR		:=	inc/
 SRC_DIR		:=	src/
