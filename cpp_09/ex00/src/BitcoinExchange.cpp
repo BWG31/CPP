@@ -23,6 +23,7 @@ BitcoinExchange &BitcoinExchange::operator=(const BitcoinExchange &rhs)
     if (&rhs == this)
         return *this;
     data_ = rhs.getData();
+    return *this;
 }
 
 //  ============| GETTERS |=============
@@ -36,7 +37,6 @@ bool BitcoinExchange::parseData(std::ifstream &input)
     std::string key, value_str;
     double value = 0;
     int line = 1;
-    bool noErrors = true;
 
     try
     {
@@ -45,9 +45,10 @@ bool BitcoinExchange::parseData(std::ifstream &input)
         {
             line ++;
             getline(input, key, ','); // VALIDATE?
+            validateInputKey(key);
             getline(input, value_str);
-            value = convertToDouble(value_str); // VALIDATE?
-            data_.insert(std::pair(key, value));
+            value = convertToDouble(value_str);
+            data_.insert(std::pair<std::string, double>(key, value));
         }
         return true;
     }
@@ -68,6 +69,20 @@ void BitcoinExchange::checkHeader(std::ifstream &input)
 
 //  ============| STATIC METHODS |=============
 
+void BitcoinExchange::validateInputKey(std::string &key)
+{
+    if (key.find_first_not_of("0123456789-") != std::string::npos || \
+        key.size() != KEY_SIZE_ || key[FIRST_DASH_] != '-' || key[SECOND_DASH_] != '-')
+        throw std::invalid_argument("Invalid date format: " + key);
+    
+    int year, month, day;
+    year = std::atoi(key.substr(0, FIRST_DASH_).c_str());
+    month = std::atoi(key.substr(FIRST_DASH_ + 1, SECOND_DASH_).c_str());
+    day = std::atoi(key.substr(SECOND_DASH_ + 1).c_str());
+
+    validateDate(year, month, day);
+}
+
 double  BitcoinExchange::convertToDouble(std::string str)
 {
 	const char	*c_str = str.c_str();
@@ -82,7 +97,11 @@ double  BitcoinExchange::convertToDouble(std::string str)
 		throw std::invalid_argument("Out of double range: " + str);
 	if (end && *end != '\0')
 		throw std::invalid_argument("Invalid trailing character(s): " + str);
-	return (value);
+    if (value < 0)
+        throw std::invalid_argument("Not a positive number: " + str);
+    if (value > std::numeric_limits<int>::max())
+        throw std::invalid_argument("Too large a number: " + str);
+    return (value);
 }
 
 

@@ -1,6 +1,6 @@
-NAME	=	#executable name
+NAME	=	btc
 
-SRC		=	#source files
+SRC		=	main BitcoinExchange
 
 INC_DIR		:=	inc/
 SRC_DIR		:=	src/
