@@ -3,7 +3,15 @@
 //  ==========| CONSTRUCTORS |==========
 BitcoinExchange::BitcoinExchange()
 {
-    //  DEFAULT
+    input_.open(CSV_FILE_.c_str(), std::ifstream::in);
+
+    if (!input_.good())
+        throw std::runtime_error("Unable to open file: " + CSV_FILE_);
+    if (!parseData())
+        throw std::runtime_error("Data parsing errors detected");
+    if (!input_.eof())
+        throw std::runtime_error("Unexpected end to data parsing");
+    std::cout << "Data file parsing complete" << std::endl;
 }
 
 BitcoinExchange::BitcoinExchange(const BitcoinExchange &other)
@@ -14,7 +22,7 @@ BitcoinExchange::BitcoinExchange(const BitcoinExchange &other)
 //  ===========| DESTRUCTOR |===========
 BitcoinExchange::~BitcoinExchange()
 {
-    //  DEFAULT
+    input_.close();
 }
 
 //  =======| OPERATOR OVERLOADS |=======
@@ -32,27 +40,32 @@ const t_data &BitcoinExchange::getData() const { return data_; }
 
 //  ============| METHODS |=============
 
-bool BitcoinExchange::parseData(std::ifstream &input)
+bool BitcoinExchange::parseData()
 {
-    std::string key, value_str;
-    double value = 0;
-    int line = 1;
+    std::pair<t_data::iterator, bool>   state;
+    std::string     key, value_str;
+    double          value = 0;
+    int             line = 1;
 
     try
     {
-        checkHeader(input);
-        while (input.good())
+        checkHeader(input_);
+        while (input_.good())
         {
             line ++;
-            getline(input, key, ','); // VALIDATE?
+            getline(input_, key, ',');
+            if (key.size() == 0)
+                continue;
             validateInputKey(key);
-            getline(input, value_str);
+            getline(input_, value_str);
             value = convertToDouble(value_str);
-            data_.insert(std::pair<std::string, double>(key, value));
+            state = data_.insert(std::pair<std::string, double>(key, value));
+            if (state.second == false)
+                throw std::invalid_argument("Insert failed for: " + key + "," + value_str);
         }
         return true;
     }
-    catch (std::exception &e)
+    catch (const std::exception &e)
     {
         std::cerr << "Error (Line " << line << "): " << e.what() << std::endl;
     }
@@ -83,6 +96,21 @@ void BitcoinExchange::validateInputKey(std::string &key)
     validateDate(year, month, day);
 }
 
+void BitcoinExchange::validateDate(int year, int month, int day)
+{
+    if (year < YEAR_MIN_ || year > YEAR_MAX_)
+        throw std::invalid_argument("Invalid year");
+    if (month < JAN || month > DEC)
+        throw std::invalid_argument("Invalid month");
+    if (day < 1 || day > 31)
+        throw std::invalid_argument("Invalid day");
+    if ((month == APR || month == JUN || month == SEP || month == NOV)\
+        && day == 31)
+        throw std::invalid_argument("Invalid day (31) in month");
+    if (month == FEB && ((year % 4 && day > 28) || (!(year % 4) && day > 29)))
+        throw std::invalid_argument("Invalid day in FEB");
+}
+
 double  BitcoinExchange::convertToDouble(std::string str)
 {
 	const char	*c_str = str.c_str();
@@ -106,3 +134,14 @@ double  BitcoinExchange::convertToDouble(std::string str)
 
 
 //  ========| VIRTUAL METHODS |=========
+
+//  ========| NON MEMBER FUNCTIONS |=========
+std::ostream &operator<<(std::ostream &os, const BitcoinExchange &rhs)
+{
+    os << std::setprecision(7);
+    for (t_data::const_iterator it = rhs.getData().begin(); it != rhs.getData().end(); ++it)
+    {
+        os << "Key: " << it->first << "\tValue: " << it->second << '\n';
+    }
+    return os;
+}
