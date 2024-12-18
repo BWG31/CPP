@@ -8,79 +8,68 @@ RPN::RPN(const RPN &other)
 	*this = other;
 }
 
-RPN::RPN(char **argv)
-{
-	for (std::string str; argv; argv++)
-	{
-		str = std::string(*argv);
-		if (str.size() == 1 || isValidNumber(str) || isValidOperator(str))
-			stack_.push(str);
-		else
-			throw std::invalid_argument("Invalid argument : " + str);
-	}
-}
-
 //  ===========| DESTRUCTOR |===========
 RPN::~RPN() {}
 
 //  =======| OPERATOR OVERLOADS |=======
 RPN &RPN::operator=(const RPN &rhs)
 {
-	this->stack_ = rhs.getStack();
+	(void)rhs;
 	return *this;
 }
 
 //  ============| METHODS |=============
 
-int RPN::calculate()
+int RPN::calculate(char *arg)
 {
+	std::string input(arg);
+	std::stringstream ss(input);
+	std::string	str;
 	std::stack<int> nums;
 
-	while (stack_.size())
+	while (getline(ss, str, ' '))
 	{
-		if (isValidNumber(stack_.top()))
-			nums.push(convertToNum(stack_.top()));
-		else if (isValidOperator(stack_.top()))
+		if (isValidNumber(str))
+			nums.push(convertToNum(str));
+		else if (isValidOperator(str))
 		{
-			if (!nums.size() < 2)
+			if (nums.size() < 2)
 				throw std::runtime_error("Expected number but found operator");
-			while (nums.size())
-			{
-				int left = nums.top();
-				nums.pop();
-				int right = nums.top();
-				nums.pop();
-				nums.push(performOperation(left, right, stack_.top()));
-			}
-			nums.empty();
+			int right = nums.top();
+			nums.pop();
+			int left = nums.top();
+			nums.pop();
+			nums.push(performOperation(left, right, str));
 		}
 		else
-			throw std::runtime_error("Invalid element in stack");
-		stack_.pop();
+			throw std::runtime_error("Invalid argument: " + str);
 	}
 	if (nums.size() != 1)
 		throw std::runtime_error("Last argument must be an operator");
 	return nums.top();
 }
 
-int RPN::performOperation(int left, int right, const std::string &operator)
+int RPN::performOperation(int left, int right, const std::string &op)
 {
-	// TODO
-}
-
-std::stack<std::string> RPN::getStack() const
-{
-	return stack_;
+	if (op == "+")
+		return (left + right);
+	if (op == "-")
+		return (left - right);
+	if (op == "*")
+		return (left * right);
+	if (op == "/")
+		return (left * right);
+	throw std::runtime_error("Invalid operand in performOperation");
 }
 
 bool RPN::isValidNumber(std::string &str)
 {
-	return (str.find_first_not_of("0123456789") == std::string::npos);
+	return (str.size() == 1 && str.find_first_not_of("0123456789") == std::string::npos);
 }
 
 bool RPN::isValidOperator(std::string &str)
 {
-	return (str.find_first_not_of("+-/*") == std::string::npos);
+	return (str.size() == 1 && str.find_first_not_of("+-/*") == std::string::npos);
 }
 
 int RPN::convertToNum(std::string &str)

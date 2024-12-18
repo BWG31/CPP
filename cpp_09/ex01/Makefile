@@ -1,6 +1,6 @@
-NAME	=	#executable name
+NAME	=	rpn
 
-SRC		=	#source files
+SRC		=	main RPN
 
 INC_DIR		:=	inc/
 SRC_DIR		:=	src/
