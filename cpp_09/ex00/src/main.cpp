@@ -2,9 +2,6 @@
 #include <iostream>
 #include <exception>
 
-const std::string BitcoinExchange::CSV_FILE_ = "data.csv";
-const std::string BitcoinExchange::CSV_HEADER_ = "date,exchange_rate";
-
 int main(int argc, char **argv)
 {
 	if (argc != 2)
