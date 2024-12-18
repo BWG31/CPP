@@ -9,13 +9,15 @@ int main(int argc, char **argv)
 		std::cerr << "Usage: ./btc <input file>" << std::endl;
 		return 1;
 	}
+
 	try{
 		BitcoinExchange exchange;
 		exchange.calculate(argv[1]);
-	}catch (const std::exception &e){
+	}
+	catch (const std::exception &e){
 		std::cerr << "Error: " << e.what() << std::endl;
 		return 2;
 	}
-	(void)argv;
+
 	return 0;
 }
