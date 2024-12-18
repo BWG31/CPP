@@ -11,7 +11,7 @@ int main(int argc, char **argv)
 	}
 	try{
 		BitcoinExchange exchange;
-		std::cout << exchange;
+		exchange.calculate(argv[1]);
 	}catch (const std::exception &e){
 		std::cerr << "Error: " << e.what() << std::endl;
 		return 2;

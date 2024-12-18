@@ -34,15 +34,69 @@ const t_data &BitcoinExchange::getData() const { return data_; }
 
 //  ============| METHODS |=============
 
+void BitcoinExchange::calculate(const char *arg)
+{
+	std::ifstream input(arg, std::ifstream::in);
+	if (!input.good())
+		throw std::runtime_error("Unable to open " + std::string(arg));
+	std::string line;
+
+	checkHeader(input, INPUT_HEADER);
+	for (size_t line_number = 2; input.good(); line_number++)
+	{
+		try
+		{
+			getline(input, line);
+			if (line.size())
+				calculateLine(line, " | ");
+		}
+		catch (const std::exception &e){
+			std::cerr << RED"Error (Line " << line_number << "): " << e.what() << RST << std::endl;
+		}
+	}
+}
+
+void BitcoinExchange::calculateLine(std::string &line, std::string seperator) const
+{
+	std::string key;
+	double		quantity, total;
+	size_t		pos;
+
+	pos = line.find(seperator);
+	if (pos == std::string::npos)
+		throw std::invalid_argument("Invalid format");
+	key = validateInputKey(line.substr(0, pos));
+	quantity = convertToDouble(line.substr(pos + seperator.size()));
+	if (quantity > INPUT_MAX_VAL)
+		throw std::invalid_argument("Too large a number");
+
+	total = findNearestDataPoint(key) * quantity;
+	std::cout << std::fixed << std::setprecision(2) << GREEN;
+	std::cout << key << " => " << quantity << " = " << total << RST << std::endl;
+}
+
+double BitcoinExchange::findNearestDataPoint(const std::string &key) const
+{
+	t_data::const_iterator match = data_.find(key);
+	if (match == data_.end())
+	{
+		match = data_.upper_bound(key);
+		if (match == data_.begin())
+			throw std::invalid_argument("Date preceeds data origin");
+		match--;
+	}
+	return (*match).second;
+}
+
 int BitcoinExchange::parseData()
 {
 	std::ifstream input(CSV_FILE, std::ifstream::in);
 	if (!input.good())
-		throw std::runtime_error("Unable to open " CSV_FILE);
+		throw std::runtime_error("Unable to open " + std::string(CSV_FILE));
 
 	int	error = 0;
-	checkHeader(input);
-	for (size_t line = 2; input.good(); line++)
+	checkHeader(input, CSV_HEADER);
+	for (size_t line_number = 2; input.good(); line_number++)
 	{
 		try{
 			std::string line;
@@ -52,7 +106,7 @@ int BitcoinExchange::parseData()
 		}
 		catch (const std::exception &e){
 			error = 1;
-			std::cerr << "Error (Line " << line << "): " << e.what() << std::endl;
+			std::cerr << "Error (Line " << line_number << "): " << e.what() << std::endl;
 		}
 	}
 	if (!input.eof())
@@ -61,12 +115,12 @@ int BitcoinExchange::parseData()
 	return error;
 }
 
-void BitcoinExchange::checkHeader(std::ifstream &input)
+void BitcoinExchange::checkHeader(std::ifstream &input, const char *expected)
 {
 	std::string first_line;
 	getline(input, first_line);
-	if (first_line.compare(CSV_HEADER))
-		throw std::invalid_argument("Invalid csv header: [" + first_line + "]\nExpected: [" + CSV_HEADER + ']');
+	if (first_line.compare(expected))
+		throw std::invalid_argument("Invalid header: [" + first_line + "]\nExpected: [" + expected + ']');
 }
 
 void BitcoinExchange::parseLine(std::string &line, std::string seperator)
@@ -126,15 +180,15 @@ double  BitcoinExchange::convertToDouble(std::string str)
 	errno = 0;
 	value = std::strtod(c_str, &end);
 	if (c_str == end)
-		throw std::invalid_argument("Unable to convert to double: [" + str + ']');
+		throw std::invalid_argument("Unable to extract value");
 	if (errno == ERANGE)
-		throw std::invalid_argument("Out of double range: [" + str + ']');
+		throw std::invalid_argument("Out of double range");
 	if (end && *end != '\0')
-		throw std::invalid_argument("Invalid trailing character(s): [" + str + ']');
+		throw std::invalid_argument("Invalid trailing character(s)");
 	if (value < 0)
-		throw std::invalid_argument("Not a positive number: [" + str + ']');
+		throw std::invalid_argument("Not a positive number");
 	if (value > std::numeric_limits<int>::max())
-		throw std::invalid_argument("Too large a number: [" + str + ']');
+		throw std::invalid_argument("Too large a number");
 	return (value);
 }
 
