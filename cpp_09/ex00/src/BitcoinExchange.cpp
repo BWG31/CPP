@@ -66,7 +66,7 @@ void BitcoinExchange::checkHeader(std::ifstream &input)
 	std::string first_line;
 	getline(input, first_line);
 	if (first_line.compare(CSV_HEADER))
-		throw std::invalid_argument("Invalid csv header:" + first_line + "\texpected: " + CSV_HEADER);
+		throw std::invalid_argument("Invalid csv header: [" + first_line + "]\nExpected: [" + CSV_HEADER + ']');
 }
 
 void BitcoinExchange::parseLine(std::string &line, std::string seperator)
