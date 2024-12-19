@@ -24,6 +24,7 @@ class RPN
 		bool isValidOperator(std::string &str);
 		int	convertToNum(std::string &str);
 		int performOperation(int left, int right, const std::string &op);
+		int safeDivide(int left, int right);
 };
 
 #endif

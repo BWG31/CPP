@@ -45,7 +45,7 @@ int RPN::calculate(char *arg)
 			throw std::runtime_error("Invalid argument: " + str);
 	}
 	if (nums.size() != 1)
-		throw std::runtime_error("Last argument must be an operator");
+		throw std::runtime_error("More than one element remaining in stack");
 	return nums.top();
 }
 
@@ -58,7 +58,7 @@ int RPN::performOperation(int left, int right, const std::string &op)
 	if (op == "*")
 		return (left * right);
 	if (op == "/")
-		return (left * right);
+		return safeDivide(left, right);
 	throw std::runtime_error("Invalid operand in performOperation");
 }
 
@@ -75,4 +75,11 @@ bool RPN::isValidOperator(std::string &str)
 int RPN::convertToNum(std::string &str)
 {
 	return (str[0] - '0');
+}
+
+int RPN::safeDivide(int left, int right)
+{
+	if (right == 0)
+		throw std::runtime_error("Cannot divide by 0");
+	return (left / right);
 }
